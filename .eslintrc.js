@@ -18,5 +18,8 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "@typescript-eslint"],
-  rules: {},
+  rules: {
+    // react は v17からimport react が不要になったのでこのルールも不要.
+    "react/react-in-jsx-scope": "off",
+  },
 };
