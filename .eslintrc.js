@@ -17,7 +17,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint"],
+  plugins: ["react", "@typescript-eslint", "import"],
   rules: {
     // react は v17からimport react が不要になったのでこのルールも不要.
     "react/react-in-jsx-scope": "off",
