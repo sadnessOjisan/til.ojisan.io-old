@@ -1,0 +1,5 @@
+{
+  "presets": ["next/babel"],
+  // NextJS で s-c を使うために必要なプラグイン
+  "plugins": [["styled-components", { "ssr": true }]]
+}
