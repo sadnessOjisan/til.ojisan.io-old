@@ -4,7 +4,11 @@
   "description": "TIL",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format:fix": "prettier --write '**/*.{ts,tsx,js,jsx,json,md}'",
+    "format": "prettier --check './src/**/*.{ts,tsx,js,jsx,json,md}'",
+    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx,js,jsx,json,md}'",
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx,json,md}'",
+    "typecheck": "tsc -p . --noEmit"
   },
   "repository": {
     "type": "git",
