@@ -2,6 +2,7 @@ import { GetStaticProps } from "next";
 import styled from "styled-components";
 import { PostType } from "../../entity/Post";
 import { getPostById } from "../../repository/getPost";
+import { getPostIds } from "../../repository/getPostIds";
 
 type Props = {
   post?: PostType;
@@ -26,8 +27,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (typeof pid !== "string") return;
   const postResponse = await getPostById(pid);
   const { data, error } = postResponse;
-  console.log("data", data);
-  console.log("error", error);
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { post: data } : { error },
@@ -36,9 +35,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export async function getStaticPaths() {
+  const postIdsResponse = await getPostIds();
+  const { data, error } = postIdsResponse;
   return {
     // / を忘れるな
-    paths: [`/posts/GnDSL3Bg3rCtmgLJpkTp`],
+    paths: data.map((id) => `/posts/${id}`),
     fallback: false,
   };
 }
