@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
 export type ISOStringType = string & { __isoString: never };
@@ -13,13 +15,20 @@ export type PostType = {
   createdDate: ISOStringType;
 };
 
-export type SubmitPostType = Omit<PostType, "id">;
+export type DocumentFieldData = Omit<PostType, "id">;
+export type SubmitPostType = Omit<PostType, "id" | "createdDate">;
 
 export const isPost = (data: any): data is PostType => {
   if (typeof data.id !== "string") return false;
+  return isPostDocumentFieldData(data);
+};
+
+export const isPostDocumentFieldData = (
+  data: any
+): data is DocumentFieldData => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
-  if (typeof data.createdDate !== "string") return false;
+  if (dayjs(data.createdDate).isValid()) return false;
   return true;
 };
 

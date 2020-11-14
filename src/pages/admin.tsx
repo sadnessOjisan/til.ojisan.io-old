@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import firebase from "firebase";
 import { FormEvent, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -86,7 +87,7 @@ const StyledComponent = styled(Component)`
 const ContainerComponent = () => {
   const [user, loading, error] = useAuthState(Firebase.instance.auth);
   const [token, setToken] = useState<string | null>(null);
-  console.log(user);
+
   if (user) {
     user.getIdToken(true).then((d) => {
       setToken(d);

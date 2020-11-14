@@ -1,4 +1,3 @@
-import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
 import { store } from "../../../infra/FirebaseServer";
 
