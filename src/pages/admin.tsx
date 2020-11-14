@@ -4,6 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import Firebase from "../infra/firebaseClient";
 import { FormEvent } from "react";
 import { signin } from "../repository/signin";
+import { postTil } from "../repository/post";
 
 interface ContainerProps {
   user: firebase.User;
@@ -25,6 +26,16 @@ const handleLogin = (e: FormEvent<HTMLFormElement>) => {
   signin(email, pass);
 };
 
+const handlePost = (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  const title = e.target["title"].value;
+  const post = e.target["post"].value;
+  if (typeof title !== "string" || typeof post !== "string") {
+    throw new Error("invalid input");
+  }
+  postTil(title, post);
+};
+
 const Component = (props: Props) => (
   <div className={props.className}>
     {props.loading ? (
@@ -36,7 +47,11 @@ const Component = (props: Props) => (
         {props.user ? (
           <div>
             <h1>post til</h1>
-            <form onSubmit={() => {}}>
+            <form
+              onSubmit={(e) => {
+                handlePost(e);
+              }}
+            >
               <input name="title" type="text"></input>
               <textarea name="post"></textarea>
               <button type="submit">submit</button>
