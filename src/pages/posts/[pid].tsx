@@ -12,8 +12,14 @@ type Props = {
 
 const Component = (props: Props) => (
   <div className={props.className}>
-    hello world!!
-    {props.post ? JSON.stringify(props.post) : JSON.stringify(props.error)}
+    {props.post ? (
+      <div>
+        <h1>{props.post.title}</h1>
+        <div dangerouslySetInnerHTML={{ __html: props.post.content }}></div>
+      </div>
+    ) : (
+      JSON.stringify(props.error)
+    )}
   </div>
 );
 
