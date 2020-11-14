@@ -2,7 +2,6 @@ import { GetStaticProps } from "next";
 import styled from "styled-components";
 import { PostType } from "../../entity/Post";
 import { getPostById } from "../../repository/getPost";
-import { ApiResponseType } from "../../type/util";
 
 type Props = {
   post?: PostType;
@@ -12,7 +11,8 @@ type Props = {
 
 const Component = (props: Props) => (
   <div className={props.className}>
-    hello world!!{props.post ? props.post : props.error}
+    hello world!!
+    {props.post ? JSON.stringify(props.post) : JSON.stringify(props.error)}
   </div>
 );
 
@@ -26,8 +26,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (typeof pid !== "string") return;
   const postResponse = await getPostById(pid);
   const { data, error } = postResponse;
+  console.log("data", data);
+  console.log("error", error);
   return {
-    props: { post: data, error },
+    // HACK: undefined は埋め込めないため
+    props: !error ? { post: data } : { error },
     revalidate: 1,
   };
 };
@@ -35,7 +38,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export async function getStaticPaths() {
   return {
     // / を忘れるな
-    paths: [`/articles/1`],
+    paths: [`/posts/1`],
     fallback: false,
   };
 }
