@@ -1,6 +1,5 @@
 import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import { shape } from "prop-types";
 
 const cert = {
   projectId: process.env.FIREBASE_PROJECT_ID,
@@ -8,7 +7,6 @@ const cert = {
   // zeit now の環境変数だと\nが\\nにエスケープされてしまっているので元に戻す? .replace(/\\n/g, "\n")
   privateKey: process.env.FIREBASE_PRIVATE_KEY,
 };
-console.log("certcertcertcert", cert);
 try {
   admin.initializeApp({
     credential: admin.credential.cert(cert),
@@ -16,7 +14,6 @@ try {
 } catch (e) {
   console.log(e);
 }
-console.log("certcertcertcert", cert);
 
 const store = admin.firestore();
 
