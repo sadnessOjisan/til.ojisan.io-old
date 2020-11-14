@@ -2,7 +2,7 @@ export type PostIdType = string & {};
 export type PostIdsType = PostIdType[];
 
 export type PostType = {
-  id: string;
+  id: PostIdType;
   title: string;
   content: string;
 };
@@ -12,6 +12,7 @@ export type SubmitPostType = Omit<PostType, "id">;
 export const isPost = (data: any): data is PostType => {
   if (typeof data.id !== "string") return false;
   if (typeof data.title !== "string") return false;
+  if (typeof data.content !== "string") return false;
   return true;
 };
 

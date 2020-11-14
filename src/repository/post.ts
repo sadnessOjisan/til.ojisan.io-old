@@ -4,12 +4,14 @@ import { ApiResponseType } from "../type/util";
 
 export const postTil = async (
   title: string,
-  content: string
+  content: string,
+  token: string
 ): Promise<ApiResponseType<PostType>> => {
   const response = await Fetch(`api/postTil`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `${token}`,
     },
     body: JSON.stringify({ title, content }),
   });
