@@ -1,10 +1,10 @@
-import { isPost, PostType } from "../entity/Post";
+import { HTMLContentType, isPost, PostType } from "../entity/Post";
 import { Fetch } from "../infra/fetch";
 import { ApiResponseType } from "../type/util";
 
 export const postTil = async (
   title: string,
-  content: string,
+  content: HTMLContentType,
   token: string
 ): Promise<ApiResponseType<PostType>> => {
   const response = await Fetch(`api/postTil`, {

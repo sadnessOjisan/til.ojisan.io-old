@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import firebase from "firebase";
 import { FormEvent, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -6,6 +5,8 @@ import styled from "styled-components";
 import Firebase from "../infra/FirebaseClient";
 import { postTil } from "../repository/post";
 import { signin } from "../repository/signin";
+import marked from "marked";
+import { createHTMLString } from "../entity/Post";
 
 interface ContainerProps {
   user: firebase.User;
@@ -35,7 +36,8 @@ const handlePost = (e: FormEvent<HTMLFormElement>, token: string) => {
   if (typeof title !== "string" || typeof content !== "string") {
     throw new Error("invalid input");
   }
-  postTil(title, content, token);
+  const html = createHTMLString(content);
+  postTil(title, html, token);
 };
 
 const Component = (props: Props) => (
