@@ -21,5 +21,6 @@ module.exports = {
   rules: {
     // react は v17からimport react が不要になったのでこのルールも不要.
     "react/react-in-jsx-scope": "off",
+    "import/order": [2, { alphabetize: { order: "asc" } }],
   },
 };
