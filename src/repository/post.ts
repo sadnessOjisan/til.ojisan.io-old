@@ -4,14 +4,14 @@ import { ApiResponseType } from "../type/util";
 
 export const postTil = async (
   title: string,
-  post: string
+  content: string
 ): Promise<ApiResponseType<PostType>> => {
   const response = await Fetch(`api/postTil`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title, post }),
+    body: JSON.stringify({ title, content }),
   });
   if (response.status !== 200) {
     console.log("response:", response);

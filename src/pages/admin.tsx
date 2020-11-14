@@ -29,11 +29,11 @@ const handleLogin = (e: FormEvent<HTMLFormElement>) => {
 const handlePost = (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   const title = e.target["title"].value;
-  const post = e.target["post"].value;
-  if (typeof title !== "string" || typeof post !== "string") {
+  const content = e.target["content"].value;
+  if (typeof title !== "string" || typeof content !== "string") {
     throw new Error("invalid input");
   }
-  postTil(title, post);
+  postTil(title, content);
 };
 
 const Component = (props: Props) => (
@@ -53,7 +53,7 @@ const Component = (props: Props) => (
               }}
             >
               <input name="title" type="text"></input>
-              <textarea name="post"></textarea>
+              <textarea name="content"></textarea>
               <button type="submit">submit</button>
             </form>
           </div>
