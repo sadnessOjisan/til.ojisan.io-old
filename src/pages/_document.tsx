@@ -1,3 +1,4 @@
+import admin from "firebase-admin";
 import Document, {
   Html,
   Head,
@@ -5,7 +6,6 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document";
-import admin from "firebase-admin";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
