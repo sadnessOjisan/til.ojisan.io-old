@@ -1,4 +1,4 @@
-export type PostIdType = string & {};
+export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
 
 export type PostType = {
