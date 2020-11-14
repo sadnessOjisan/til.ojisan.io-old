@@ -39,7 +39,7 @@ export async function getStaticPaths() {
   const { data, error } = postIdsResponse;
   return {
     // / を忘れるな
-    paths: data.map((id) => `/posts/${id}`),
+    paths: !error ? data.map((id) => `/posts/${id}`) : [],
     fallback: false,
   };
 }
