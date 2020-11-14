@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/sadnessOjisan/til.ojisan.io#readme",
   "dependencies": {
+    "firebase": "^8.0.2",
     "firebase-admin": "^9.4.1",
     "next": "^10.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-firebase-hooks": "^2.2.0",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
