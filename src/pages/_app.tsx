@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect } from "react";
-import Firebase from "../infra/firebaseClient";
+import Firebase from "../infra/FirebaseClient";
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {

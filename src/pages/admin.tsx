@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import firebase from "firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Firebase from "../infra/firebaseClient";
+import Firebase from "../infra/FirebaseClient";
 import { FormEvent, useState } from "react";
 import { signin } from "../repository/signin";
 import { postTil } from "../repository/post";
