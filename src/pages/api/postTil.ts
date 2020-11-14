@@ -1,21 +1,9 @@
 import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isSubmitPostType } from "../../entity/Post";
+import { FireStore } from "../../infra/FirebaseServer";
 
-const cert = {
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-};
-try {
-  admin.initializeApp({
-    credential: admin.credential.cert(cert),
-  });
-} catch (e) {
-  console.log(e);
-}
-
-const store = admin.firestore();
+const store = FireStore;
 
 export default async (req: NextApiRequest, response: NextApiResponse) => {
   const { headers } = req;

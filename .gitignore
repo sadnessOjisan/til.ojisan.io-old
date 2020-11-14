@@ -107,3 +107,4 @@ dist
 config/**
 !.gitkeep
 .env.local
+out
