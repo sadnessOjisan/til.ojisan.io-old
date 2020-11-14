@@ -23,7 +23,6 @@ const StyledComponent = styled(Component)`
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { pid } = context.params;
-  console.log("pid", pid);
   if (typeof pid !== "string") return;
   const postResponse = await getPostById(pid);
   const { data, error } = postResponse;

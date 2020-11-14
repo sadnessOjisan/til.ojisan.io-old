@@ -28,7 +28,7 @@ export const isPostDocumentFieldData = (
 ): data is DocumentFieldData => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
-  if (dayjs(data.createdDate).isValid()) return false;
+  if (!dayjs(data.createdDate).isValid()) return false;
   return true;
 };
 

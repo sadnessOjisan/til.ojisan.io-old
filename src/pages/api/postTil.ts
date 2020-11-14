@@ -10,8 +10,6 @@ import { Admin, store } from "../../infra/FirebaseServer";
 import dayjs from "dayjs";
 
 export default async (req: NextApiRequest, response: NextApiResponse) => {
-  console.log("3");
-  console.log(Admin.firestore.FieldValue.serverTimestamp());
   const { headers } = req;
   const idToken = headers.authorization;
   const decodedToken = await admin.auth().verifyIdToken(idToken);

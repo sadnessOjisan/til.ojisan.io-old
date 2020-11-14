@@ -35,7 +35,6 @@ const StyledComponent = styled(Component)`
 export const getStaticProps: GetStaticProps = async (context) => {
   const postResponse = await getPosts();
   const { data, error } = postResponse;
-  console.log(postResponse);
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { posts: data } : { error },

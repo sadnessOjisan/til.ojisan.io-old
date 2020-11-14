@@ -7,7 +7,7 @@ export const getPostById = async (
 ): Promise<ApiResponseType<PostType>> => {
   const response = await Fetch(`api/posts/${pid}`);
   if (response.status !== 200) {
-    console.log("response:", response);
+    console.log("<getPostById> response:", response);
     return { data: undefined, error: "invalid status error" };
   }
   const data = await response.json();
