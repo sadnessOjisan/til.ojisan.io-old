@@ -17,17 +17,22 @@ try {
 const store = admin.firestore();
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
-  const {
-    query: { pid },
-  } = request;
-  if (!pid) {
-    console.error("pid", pid);
-    throw new Error("invalid request");
+  try {
+    const {
+      query: { pid },
+    } = request;
+    if (!pid) {
+      console.error("pid", pid);
+      throw new Error("invalid request");
+    }
+    const snapshot = await store
+      .collection("posts")
+      .doc("GnDSL3Bg3rCtmgLJpkTp")
+      .get();
+    const data = await snapshot.data();
+    response.json({ id: snapshot.id, ...data });
+  } catch (e) {
+    response.status(500);
+    response.json({ error: e });
   }
-  const snapshot = await store
-    .collection("posts")
-    .doc("GnDSL3Bg3rCtmgLJpkTp")
-    .get();
-  const data = await snapshot.data();
-  response.json({ id: snapshot.id, ...data });
 };
