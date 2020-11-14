@@ -27,7 +27,10 @@ export default class Firebase {
     if (!firebase.apps.length) {
       const env = genFirebaseConfig();
       firebase.initializeApp(env);
-      firebase.analytics();
+      // @ts-ignore
+      if (process.browser) {
+        firebase.analytics();
+      }
     }
     this._app = firebase.app();
     this._db = firebase.firestore();
