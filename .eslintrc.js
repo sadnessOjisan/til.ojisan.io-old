@@ -21,6 +21,8 @@ module.exports = {
   rules: {
     // react は v17からimport react が不要になったのでこのルールも不要.
     "react/react-in-jsx-scope": "off",
+    // process系の型エラーは無視したい
+    "@typescript-eslint/ban-ts-comment": "off",
     "import/order": [2, { alphabetize: { order: "asc" } }],
   },
 };
