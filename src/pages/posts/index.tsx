@@ -43,12 +43,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
   };
 };
 
-export async function getStaticPaths() {
-  return {
-    // / を忘れるな
-    paths: [`/posts`],
-    fallback: false,
-  };
-}
-
 export default StyledComponent;
