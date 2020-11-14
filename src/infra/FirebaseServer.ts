@@ -24,4 +24,5 @@ try {
   }
 }
 
-export const FireStore = admin.firestore();
+export const Admin = admin;
+export const store = admin.firestore();

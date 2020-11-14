@@ -1,9 +1,12 @@
 import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import { isSubmitPostType } from "../../entity/Post";
-import { FireStore } from "../../infra/FirebaseServer";
-
-const store = FireStore;
+import {
+  ISOStringType,
+  isSubmitPostType,
+  PostType,
+  SubmitPostType,
+} from "../../entity/Post";
+import { Admin, store } from "../../infra/FirebaseServer";
 
 export default async (req: NextApiRequest, response: NextApiResponse) => {
   const { headers } = req;
@@ -19,8 +22,12 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     console.error("invalid body: ", body);
     throw new Error("invalid request");
   }
+  const bodyWithTimeStamp = {
+    ...body,
+    createdAt: Admin.firestore.FieldValue.serverTimestamp(),
+  };
   try {
-    await store.collection("posts").add(body);
+    await store.collection("posts").add(bodyWithTimeStamp);
     response.status(204);
     response.json({});
   } catch (e) {
