@@ -1,22 +1,24 @@
 import dayjs from "dayjs";
+import marked from "marked";
 
 export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
 export type ISOStringType = string & { __isoString: never };
-
-export const createISOString = (date: string): ISOStringType => {
-  return "" as ISOStringType;
-};
+export type HTMLContentType = string & { __htmlString: never };
 
 export type PostType = {
   id: PostIdType;
   title: string;
-  content: string;
+  content: HTMLContentType;
   createdDate: ISOStringType;
 };
 
 export type DocumentFieldData = Omit<PostType, "id">;
 export type SubmitPostType = Omit<PostType, "id" | "createdDate">;
+
+export const createHTMLString = (md: string): HTMLContentType => {
+  return marked(md);
+};
 
 export const isPost = (data: any): data is PostType => {
   if (typeof data.id !== "string") return false;
