@@ -38,7 +38,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export async function getStaticPaths() {
   return {
     // / を忘れるな
-    paths: [`/posts/1`],
+    paths: [`/posts/GnDSL3Bg3rCtmgLJpkTp`],
     fallback: false,
   };
 }
