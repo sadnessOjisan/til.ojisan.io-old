@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import Link from "next/link";
 import styled from "styled-components";
 import { PostType } from "../../entity/Post";
 import { getPosts } from "../../repository/getPosts";
@@ -15,8 +16,12 @@ const Component = (props: Props) => (
     {props.posts
       ? props.posts.map((post) => (
           <div key={post.id}>
-            <p>id:{post.id}</p>
-            <p>title:{post.title}</p>
+            <Link href={`/posts/${post.id}`}>
+              <a>
+                <p>id:{post.id}</p>
+                <p>title:{post.title}</p>
+              </a>
+            </Link>
           </div>
         ))
       : JSON.stringify(props.error)}
