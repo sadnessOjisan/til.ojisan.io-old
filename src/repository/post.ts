@@ -16,7 +16,7 @@ export const postTil = async (
     body: JSON.stringify({ title, content }),
   });
   if (response.status !== 200) {
-    console.log("response:", response);
+    console.log("<postTil> response:", response);
     return { data: undefined, error: "invalid status error" };
   }
   const data = await response.json();

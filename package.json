@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/sadnessOjisan/til.ojisan.io#readme",
   "dependencies": {
+    "dayjs": "^1.9.6",
     "firebase": "^7.15.5",
     "firebase-admin": "^9.4.1",
     "next": "^10.0.1",
