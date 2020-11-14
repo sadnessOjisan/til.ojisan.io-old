@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 const cert = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  // zeit now の環境変数だと\nが\\nにエスケープされてしまっているので元に戻す? .replace(/\\n/g, "\n")
   privateKey: process.env.FIREBASE_PRIVATE_KEY,
 };
 try {
