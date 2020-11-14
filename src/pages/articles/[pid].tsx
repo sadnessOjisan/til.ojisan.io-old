@@ -1,13 +1,19 @@
 import { GetStaticProps } from "next";
 import styled from "styled-components";
+import { PostType } from "../../entity/Post";
 import { getPostById } from "../../repository/getPost";
+import { ApiResponseType } from "../../type/util";
 
 type Props = {
+  post?: PostType;
+  error?: string;
   className?: string;
 };
 
 const Component = (props: Props) => (
-  <div className={props.className}>hello world!!{JSON.stringify(props)}</div>
+  <div className={props.className}>
+    hello world!!{props.post ? props.post : props.error}
+  </div>
 );
 
 const StyledComponent = styled(Component)`
@@ -18,9 +24,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { pid } = context.params;
   console.log("pid", pid);
   if (typeof pid !== "string") return;
-  const post = await getPostById(pid);
+  const postResponse = await getPostById(pid);
+  const { data, error } = postResponse;
   return {
-    props: { post },
+    props: { post: data, error },
     revalidate: 1,
   };
 };
