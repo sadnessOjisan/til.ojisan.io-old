@@ -21,14 +21,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     const {
       query: { pid },
     } = request;
-    if (!pid) {
+    if (typeof pid !== "string") {
       console.error("pid", pid);
       throw new Error("invalid request");
     }
-    const snapshot = await store
-      .collection("posts")
-      .doc("GnDSL3Bg3rCtmgLJpkTp")
-      .get();
+    const snapshot = await store.collection("posts").doc(pid).get();
     const data = await snapshot.data();
     response.json({ id: snapshot.id, ...data });
   } catch (e) {
