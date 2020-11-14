@@ -1,8 +1,6 @@
 import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import { FireStore } from "../../../infra/FirebaseServer";
-
-const store = FireStore;
+import { store } from "../../../infra/FirebaseServer";
 
 export default async (_: NextApiRequest, response: NextApiResponse) => {
   try {
