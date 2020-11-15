@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
 import { Layout } from "../../components/Layout";
 import { Post } from "../../components/Post";
@@ -9,18 +10,23 @@ import { getPostIds } from "../../repository/getPostIds";
 type Props = {
   post?: PostViewType;
   error?: string;
+  isFallback: boolean;
   className?: string;
 };
 
 const Component = (props: Props) => (
   <Layout>
-    <div className={props.className}>
-      {props.post ? (
-        <Post post={props.post}></Post>
-      ) : (
-        JSON.stringify(props.error)
-      )}
-    </div>
+    {props.isFallback ? (
+      <div>generating file...</div>
+    ) : (
+      <div className={props.className}>
+        {props.post ? (
+          <Post post={props.post}></Post>
+        ) : (
+          JSON.stringify(props.error)
+        )}
+      </div>
+    )}
   </Layout>
 );
 
@@ -28,6 +34,12 @@ const StyledComponent = styled(Component)`
   padding: 12px;
   color: white;
 `;
+
+const ContainerComponent = () => {
+  const router = useRouter();
+  const isFallback = router.isFallback;
+  return <StyledComponent isFallback={isFallback}></StyledComponent>;
+};
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { pid } = context.params;
@@ -38,7 +50,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { post: viewData } : { error },
-    revalidate: 1,
+    revalidate: 600,
   };
 };
 
@@ -48,7 +60,7 @@ export async function getStaticPaths() {
   return {
     // / を忘れるな
     paths: !error ? data.map((id) => `/posts/${id}`) : [],
-    fallback: false,
+    fallback: true,
   };
 }
 
