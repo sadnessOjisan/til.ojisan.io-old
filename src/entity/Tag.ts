@@ -20,7 +20,35 @@ export const isTags = (data: any): data is TagType[] => {
 };
 
 export const createTag = (name: string): TagType => {
-  const backgroundColor = "red";
-  const innerColor = "white";
+  const isWhite = Math.random() < 0.5;
+  let backgroundColor, innerColor;
+  if (isWhite) {
+    backgroundColor =
+      bgWithWhite[Math.floor(Math.random() * bgWithWhite.length)];
+    innerColor = "#fffffe";
+  } else {
+    backgroundColor =
+      bgWithBlack[Math.floor(Math.random() * bgWithBlack.length)];
+    innerColor = "#271c19";
+  }
+
   return { name, backgroundColor, innerColor };
 };
+
+const bgWithWhite = [
+  "#ff8906",
+  "#232946",
+  "#0e172c",
+  "#6246ea",
+  "#a786df",
+  "#9656a1",
+];
+
+const bgWithBlack = [
+  "#eebbc3",
+  "#ffd803",
+  "#ff8e3c",
+  "#eff0f3",
+  "#ff6e6c",
+  "#ffc0ad",
+];

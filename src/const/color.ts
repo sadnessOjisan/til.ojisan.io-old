@@ -4,5 +4,5 @@ export const Color = {
   paragraph: "#a7a9be",
   highlight: "#e53170",
   second: "#f25f4c",
-  link: "#ff8906",
+  link: "#ff8ba7",
 };

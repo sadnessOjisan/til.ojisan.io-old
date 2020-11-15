@@ -45,6 +45,7 @@ const StyledComponent = styled(Component)`
   p {
     margin-bottom: 24px;
     padding: 0;
+    line-height: 2;
   }
   h1 {
     font-size: 48px;
@@ -69,6 +70,9 @@ const StyledComponent = styled(Component)`
     text-decoration: none;
     vertical-align: baseline;
   }
+  strong {
+    color: ${Color.highlight};
+  }
   a:hover {
     text-decoration: underline;
   }
@@ -81,7 +85,7 @@ const StyledComponent = styled(Component)`
     margin: 0;
   }
   li {
-    line-height: 24px;
+    line-height: 2;
   }
   li ul,
   li ul {
@@ -91,8 +95,7 @@ const StyledComponent = styled(Component)`
   ul,
   ol {
     font-size: 16px;
-    line-height: 24px;
-    max-width: 540px;
+    line-height: 2;
   }
   pre {
     font-size: 16px;

@@ -15,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
 
 html {
   font-size: 16px;
+  font-family:'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
 }
 
 body {

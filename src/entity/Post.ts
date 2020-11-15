@@ -26,7 +26,7 @@ const isValidDate = (date: string) => {
 
 const createFormattedDate = (date: string): FormattedDateType => {
   if (!isValidDate) throw new Error("invalid date");
-  return dayjs(date).format("YYYY/MM/DD") as FormattedDateType;
+  return dayjs(date).format("YYYY年M月D日 hh時mm分") as FormattedDateType;
 };
 
 export const createPostForView = (post: PostType): PostViewType => {

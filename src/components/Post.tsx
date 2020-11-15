@@ -1,7 +1,8 @@
-import Link from "next/link";
 import styled from "styled-components";
+import { Color } from "../const/color";
 import { PostViewType } from "../entity/Post";
 import { PostBody } from "./PostBody";
+import { Tag } from "./Tag";
 
 type PassedPropsType = {
   post: PostViewType;
@@ -14,12 +15,12 @@ interface Props extends PassedPropsType {
 const Component = (props: Props) => (
   <div className={props.className}>
     <h1 className="title">{props.post.title}</h1>
-    <p>
+    <div className="tags">
       {props.post.tags.map((tag) => (
-        <span>#{tag.name}</span>
+        <Tag tag={tag}></Tag>
       ))}
-    </p>
-    <p>{props.post.createdAt}</p>
+    </div>
+    <p className="date">{props.post.createdAt}</p>
     <PostBody content={props.post.content} className="body"></PostBody>
   </div>
 );
@@ -31,6 +32,16 @@ const StyledComponent = styled(Component)`
   }
   & > .body {
     margin-top: 36px;
+  }
+  & > .tags {
+    display: flex;
+    & > * {
+      margin-right: 12px;
+    }
+  }
+  & > .date {
+    margin-top: 12px;
+    color: ${Color.paragraph};
   }
 `;
 
