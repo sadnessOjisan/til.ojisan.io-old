@@ -1,28 +1,56 @@
-import { HTMLContentType, isPost, PostType } from "../entity/Post";
+import { useCallback, useEffect, useState } from "react";
+import {
+  HTMLContentType,
+  isPost,
+  PostType,
+  SubmitPostType,
+} from "../entity/Post";
 import { Fetch } from "../infra/fetch";
-import { ApiResponseType } from "../type/util";
 
-export const postTil = async (
-  title: string,
-  content: HTMLContentType,
-  token: string
-): Promise<ApiResponseType<PostType>> => {
-  const response = await Fetch(`api/postTil`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
+export const usePostTil = (): [
+  boolean,
+  (body: SubmitPostType, token: string) => void,
+  string
+] => {
+  const [sending, setSendingState] = useState(false);
+  const [error, setErrorMessage] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [body, setBody] = useState<SubmitPostType | null>(null);
+  useEffect(() => {
+    if (body === null || token === null) return;
+    Fetch(`api/postTil`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          console.log(res);
+          setErrorMessage("fail post");
+          setSendingState(false);
+          return;
+        }
+        setErrorMessage(null);
+        setSendingState(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrorMessage("fail post");
+        setSendingState(false);
+      });
+  }, [sending]);
+
+  const post = useCallback(
+    (body: SubmitPostType, token: string): void => {
+      setBody(body);
+      setToken(token);
+      setSendingState(true);
     },
-    body: JSON.stringify({ title, content }),
-  });
-  if (response.status !== 200) {
-    console.log("<postTil> response:", response);
-    return { data: undefined, error: "invalid status error" };
-  }
-  const data = await response.json();
-  if (isPost(data)) {
-    return { data, error: undefined };
-  } else {
-    return { data: undefined, error: "invalid data struct" };
-  }
+    [token, body]
+  );
+
+  return [sending, post, error];
 };

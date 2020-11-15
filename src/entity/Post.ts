@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import marked from "marked";
+import { TagType, isTags } from "./Tag";
 
 export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
@@ -11,6 +12,7 @@ export type PostType = {
   title: string;
   content: HTMLContentType;
   createdDate: ISOStringType;
+  tags: TagType[];
 };
 
 export type DocumentFieldData = Omit<PostType, "id">;
@@ -31,6 +33,7 @@ export const isPostDocumentFieldData = (
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
   if (!dayjs(data.createdDate).isValid()) return false;
+  if (!isTags(data.tags)) return false;
   return true;
 };
 

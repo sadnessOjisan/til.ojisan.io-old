@@ -3,42 +3,26 @@ import { FormEvent, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import Firebase from "../infra/FirebaseClient";
-import { postTil } from "../repository/post";
+import { usePostTil } from "../repository/post";
 import { signin } from "../repository/signin";
-import marked from "marked";
 import { createHTMLString } from "../entity/Post";
+import { createTag } from "../entity/Tag";
+import Link from "next/link";
 
 interface ContainerProps {
   user: firebase.User;
   loading: boolean;
   error: firebase.auth.Error;
   token?: string;
+  handlePost: (e: FormEvent<HTMLFormElement>, token: string) => void;
+  handleLogin: (e: FormEvent<HTMLFormElement>) => void;
+  sending: boolean;
+  postError: string;
 }
 
 interface Props extends ContainerProps {
   className?: string;
 }
-
-const handleLogin = (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const email = e.target["email"].value;
-  const pass = e.target["pass"].value;
-  if (typeof email !== "string" || typeof pass !== "string") {
-    throw new Error("invalid input");
-  }
-  signin(email, pass);
-};
-
-const handlePost = (e: FormEvent<HTMLFormElement>, token: string) => {
-  e.preventDefault();
-  const title = e.target["title"].value;
-  const content = e.target["content"].value;
-  if (typeof title !== "string" || typeof content !== "string") {
-    throw new Error("invalid input");
-  }
-  const html = createHTMLString(content);
-  postTil(title, html, token);
-};
 
 const Component = (props: Props) => (
   <div className={props.className}>
@@ -50,23 +34,32 @@ const Component = (props: Props) => (
       <div>
         {props.user && props.token ? (
           <div>
+            <Link href="/posts">posts</Link>
             <h1>post til</h1>
-            <form
-              onSubmit={(e) => {
-                handlePost(e, props.token);
-              }}
-            >
-              <input name="title" type="text"></input>
-              <textarea name="content"></textarea>
-              <button type="submit">submit</button>
-            </form>
+            {props.sending ? (
+              <div>sending</div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  props.handlePost(e, props.token);
+                }}
+              >
+                <label>title</label>
+                <input name="title" type="text"></input>
+                <label>content</label>
+                <textarea name="content"></textarea>
+                <label>tags</label>
+                <input name="tags" type="text"></input>
+                <button type="submit">submit</button>
+              </form>
+            )}
           </div>
         ) : (
           <div>
             <h1>login</h1>
             <form
               onSubmit={(e) => {
-                handleLogin(e);
+                props.handleLogin(e);
               }}
             >
               <label>email</label>
@@ -89,13 +82,53 @@ const StyledComponent = styled(Component)`
 const ContainerComponent = () => {
   const [user, loading, error] = useAuthState(Firebase.instance.auth);
   const [token, setToken] = useState<string | null>(null);
+  const [sending, post, postError] = usePostTil();
+
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const email = e.target["email"].value;
+    const pass = e.target["pass"].value;
+    if (typeof email !== "string" || typeof pass !== "string") {
+      throw new Error("invalid input");
+    }
+    signin(email, pass);
+  };
+
+  const handlePost = (e: FormEvent<HTMLFormElement>, token: string) => {
+    e.preventDefault();
+    const title = e.target["title"].value;
+    const content = e.target["content"].value;
+    const tagsString = e.target["tags"].value;
+    if (
+      typeof title !== "string" ||
+      typeof content !== "string" ||
+      typeof tagsString !== "string"
+    ) {
+      throw new Error("データがたりません");
+    }
+    const tags = tagsString
+      .replace(" ", "")
+      .split(",")
+      .map((tag) => createTag(tag));
+    const html = createHTMLString(content);
+    post({ title, content: html, tags }, token);
+  };
 
   if (user) {
     user.getIdToken(true).then((d) => {
       setToken(d);
     });
   }
-  const containerProps = { user, loading, error, token };
+  const containerProps = {
+    user,
+    loading,
+    error,
+    token,
+    handleLogin,
+    handlePost,
+    sending,
+    postError,
+  };
   return <StyledComponent {...{ ...containerProps }}></StyledComponent>;
 };
 

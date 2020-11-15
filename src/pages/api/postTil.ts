@@ -1,12 +1,7 @@
 import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  isPostDocumentFieldData,
-  isSubmitPostType,
-  SubmitPostType,
-  DocumentFieldData,
-} from "../../entity/Post";
-import { Admin, store } from "../../infra/FirebaseServer";
+import { isSubmitPostType } from "../../entity/Post";
+import { store } from "../../infra/FirebaseServer";
 import dayjs from "dayjs";
 
 export default async (req: NextApiRequest, response: NextApiResponse) => {
