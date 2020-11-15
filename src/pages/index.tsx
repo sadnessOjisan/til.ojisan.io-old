@@ -41,7 +41,7 @@ const StyledComponent = styled(Component)`
 export const getStaticProps: GetStaticProps = async (context) => {
   const postResponse = await getPosts();
   const { data, error } = postResponse;
-  const viewData = data.map((d) => createPostForView(d));
+  const viewData = data.map((d) => createPostForView(d, false));
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { posts: viewData } : { error },

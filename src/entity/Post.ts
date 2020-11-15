@@ -24,13 +24,21 @@ const isValidDate = (date: string) => {
   return dayjs(date).isValid();
 };
 
-const createFormattedDate = (date: string): FormattedDateType => {
+const createFormattedDate = (
+  date: string,
+  isHour: boolean
+): FormattedDateType => {
   if (!isValidDate) throw new Error("invalid date");
-  return dayjs(date).format("YYYY年M月D日 hh時mm分") as FormattedDateType;
+  return isHour
+    ? (dayjs(date).format("YYYY年M月D日 hh時mm分") as FormattedDateType)
+    : (dayjs(date).format("YYYY年M月D日") as FormattedDateType);
 };
 
-export const createPostForView = (post: PostType): PostViewType => {
-  const formattedDate = createFormattedDate(post.createdAt);
+export const createPostForView = (
+  post: PostType,
+  isHour: boolean
+): PostViewType => {
+  const formattedDate = createFormattedDate(post.createdAt, isHour);
   return { ...post, createdAt: formattedDate };
 };
 

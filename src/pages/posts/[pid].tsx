@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (typeof pid !== "string") return;
   const postResponse = await getPostById(pid);
   const { data, error } = postResponse;
-  const viewData = createPostForView(data);
+  const viewData = createPostForView(data, true);
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { post: viewData } : { error },

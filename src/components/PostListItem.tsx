@@ -14,7 +14,7 @@ const Component = (props: Props) => (
   <div className={props.className}>
     <Link href={`/posts/${props.post.id}`}>
       <a>
-        <span>{props.post.createdAt}</span>
+        <span className="date">{props.post.createdAt}</span>
         <span>{props.post.title}</span>
         <span className="tags">
           [
@@ -36,7 +36,7 @@ const StyledComponent = styled(Component)`
     color: white;
     text-decoration: none;
     & > span {
-      margin-left: 12px;
+      margin-left: 18px;
     }
     & > .tags {
       & > .tag {
@@ -50,6 +50,8 @@ const StyledComponent = styled(Component)`
           }
         }
       }
+    }
+    & > .date {
     }
   }
 `;
