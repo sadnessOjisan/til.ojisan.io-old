@@ -11,7 +11,7 @@ interface Props extends PassedPropsType {
 }
 
 const Component = (props: Props) => (
-  <div className={props.className} key={props.post.id}>
+  <div className={props.className}>
     <Link href={`/posts/${props.post.id}`}>
       <a>
         <span>{props.post.createdAt}</span>

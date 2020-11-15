@@ -1,10 +1,10 @@
 import { GetStaticProps } from "next";
 import styled from "styled-components";
-import { PostListItem } from "../components/PostListItem";
 import { Layout } from "../components/Layout";
+import { PostListItem } from "../components/PostListItem";
+import { Color } from "../const/color";
 import { createPostForView, PostViewType } from "../entity/Post";
 import { getPosts } from "../repository/getPosts";
-import { Color } from "../const/color";
 
 type Props = {
   posts?: PostViewType[];
@@ -19,7 +19,9 @@ const Component = (props: Props) => (
         <span>T</span>oday oj<span>I</span>san <span>L</span>earned
       </h1>
       {props.posts
-        ? props.posts.map((post) => <PostListItem post={post}></PostListItem>)
+        ? props.posts.map((post) => (
+            <PostListItem post={post} key={post.id}></PostListItem>
+          ))
         : JSON.stringify(props.error)}
     </div>
   </Layout>
