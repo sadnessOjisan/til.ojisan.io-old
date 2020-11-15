@@ -16,10 +16,10 @@ const Component = (props: Props) => (
       <a>
         <span>{props.post.createdAt}</span>
         <span>{props.post.title}</span>
-        <span>
+        <span className="tags">
           [
           {props.post.tags.map((tag) => (
-            <span>{tag.name},</span>
+            <span className="tag">{tag.name}</span>
           ))}
           ]
         </span>
@@ -37,6 +37,19 @@ const StyledComponent = styled(Component)`
     text-decoration: none;
     & > span {
       margin-left: 12px;
+    }
+    & > .tags {
+      & > .tag {
+        margin: 0 4px;
+        &::after {
+          content: ",";
+        }
+        &:last-child {
+          &::after {
+            content: "";
+          }
+        }
+      }
     }
   }
 `;

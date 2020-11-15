@@ -17,7 +17,7 @@ const Component = (props: Props) => (
     <h1 className="title">{props.post.title}</h1>
     <div className="tags">
       {props.post.tags.map((tag) => (
-        <Tag tag={tag}></Tag>
+        <Tag tag={tag} key={tag.name}></Tag>
       ))}
     </div>
     <p className="date">{props.post.createdAt}</p>
