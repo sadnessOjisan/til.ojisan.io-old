@@ -5,18 +5,37 @@ import { TagType, isTags } from "./Tag";
 export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
 export type ISOStringType = string & { __isoString: never };
+export type FormattedDateType = string & { __formattedDateString: never };
 export type HTMLContentType = string & { __htmlString: never };
 
 export type PostType = {
   id: PostIdType;
   title: string;
   content: HTMLContentType;
-  createdDate: ISOStringType;
+  createdAt: ISOStringType;
   tags: TagType[];
 };
 
+export type PostViewType = Omit<PostType, "createdAt"> & {
+  createdAt: FormattedDateType;
+};
+
+const isValidDate = (date: string) => {
+  return dayjs(date).isValid();
+};
+
+const createFormattedDate = (date: string): FormattedDateType => {
+  if (!isValidDate) throw new Error("invalid date");
+  return dayjs(date).format("YYYY/MM/DD") as FormattedDateType;
+};
+
+export const createPostForView = (post: PostType): PostViewType => {
+  const formattedDate = createFormattedDate(post.createdAt);
+  return { ...post, createdAt: formattedDate };
+};
+
 export type DocumentFieldData = Omit<PostType, "id">;
-export type SubmitPostType = Omit<PostType, "id" | "createdDate">;
+export type SubmitPostType = Omit<PostType, "id" | "createdAt">;
 
 export const createHTMLString = (md: string): HTMLContentType => {
   return marked(md);
@@ -32,7 +51,7 @@ export const isPostDocumentFieldData = (
 ): data is DocumentFieldData => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
-  if (!dayjs(data.createdDate).isValid()) return false;
+  if (!isValidDate(data.createdAt)) return false;
   if (!isTags(data.tags)) return false;
   return true;
 };

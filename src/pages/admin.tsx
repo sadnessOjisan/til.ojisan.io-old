@@ -34,7 +34,7 @@ const Component = (props: Props) => (
       <div>
         {props.user && props.token ? (
           <div>
-            <Link href="/posts">posts</Link>
+            <Link href="/">posts</Link>
             <h1>post til</h1>
             {props.sending ? (
               <div>sending</div>
