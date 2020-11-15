@@ -19,7 +19,9 @@ const Component = (props: Props) => (
         <span className="tags">
           [
           {props.post.tags.map((tag) => (
-            <span className="tag">{tag.name}</span>
+            <span className="tag" key={tag.name}>
+              {tag.name}
+            </span>
           ))}
           ]
         </span>
