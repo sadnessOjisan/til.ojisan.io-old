@@ -15,7 +15,7 @@ export default async (_: NextApiRequest, response: NextApiResponse) => {
     throw new Error("invalid data");
   }
   const sortedPosts = posts.sort((a, b) =>
-    a.createdDate < b.createdDate ? 1 : -1
+    a.createdAt < b.createdAt ? 1 : -1
   );
   response.json(sortedPosts);
 };
