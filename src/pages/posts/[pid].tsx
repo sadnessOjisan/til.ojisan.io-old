@@ -1,11 +1,11 @@
 import { GetStaticProps } from "next";
 import styled from "styled-components";
-import { PostType } from "../../entity/Post";
+import { createPostForView, PostType, PostViewType } from "../../entity/Post";
 import { getPostById } from "../../repository/getPost";
 import { getPostIds } from "../../repository/getPostIds";
 
 type Props = {
-  post?: PostType;
+  post?: PostViewType;
   error?: string;
   className?: string;
 };
@@ -15,6 +15,12 @@ const Component = (props: Props) => (
     {props.post ? (
       <div>
         <h1>{props.post.title}</h1>
+        <p>
+          {props.post.tags.map((tag) => (
+            <div>{tag.name}</div>
+          ))}
+        </p>
+        <p>{props.post.createdAt}</p>
         <div dangerouslySetInnerHTML={{ __html: props.post.content }}></div>
       </div>
     ) : (
@@ -32,9 +38,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (typeof pid !== "string") return;
   const postResponse = await getPostById(pid);
   const { data, error } = postResponse;
+  const viewData = createPostForView(data);
   return {
     // HACK: undefined は埋め込めないため
-    props: !error ? { post: data } : { error },
+    props: !error ? { post: viewData } : { error },
     revalidate: 1,
   };
 };
