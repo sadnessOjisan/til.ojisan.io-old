@@ -38,10 +38,12 @@ export const createTag = (name: string): TagType => {
 const bgWithWhite = [
   "#ff8906",
   "#232946",
-  "#0e172c",
   "#6246ea",
-  "#a786df",
   "#9656a1",
+  "#5d55a1",
+  "#8c7851",
+  "#00473e",
+  "#e53170",
 ];
 
 const bgWithBlack = [
@@ -51,4 +53,5 @@ const bgWithBlack = [
   "#eff0f3",
   "#ff6e6c",
   "#ffc0ad",
+  "c3ffad",
 ];
