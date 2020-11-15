@@ -1,7 +1,26 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect } from "react";
+import { createGlobalStyle } from "styled-components";
 import Firebase from "../infra/FirebaseClient";
+
+const GlobalStyle = createGlobalStyle`
+*,
+*:after,
+*:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+}
+`;
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -17,6 +36,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         {/* <link rel="shortcut icon" href="/favicon.png" key="shortcutIcon" /> */}
         {/* <link rel="manifest" href="/manifest.json" /> */}
       </Head>
+      <GlobalStyle></GlobalStyle>
       <Component {...pageProps} />
     </>
   );

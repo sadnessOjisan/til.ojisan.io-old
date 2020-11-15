@@ -1,6 +1,7 @@
 import { GetStaticProps } from "next";
-import Link from "next/link";
 import styled from "styled-components";
+import { PostListItem } from "../components/PostListItem";
+import { Layout } from "../components/Layout";
 import { createPostForView, PostViewType } from "../entity/Post";
 import { getPosts } from "../repository/getPosts";
 
@@ -11,26 +12,22 @@ type Props = {
 };
 
 const Component = (props: Props) => (
-  <div className={props.className}>
-    hello world!!
-    {props.posts
-      ? props.posts.map((post) => (
-          <div key={post.id}>
-            <Link href={`/posts/${post.id}`}>
-              <a>
-                <p>date: {post.createdAt}</p>
-                <p>id:{post.id}</p>
-                <p>title:{post.title}</p>
-              </a>
-            </Link>
-          </div>
-        ))
-      : JSON.stringify(props.error)}
-  </div>
+  <Layout>
+    <div className={props.className}>
+      <h1>Today Ojisan Learned</h1>
+      {props.posts
+        ? props.posts.map((post) => <PostListItem post={post}></PostListItem>)
+        : JSON.stringify(props.error)}
+    </div>
+  </Layout>
 );
 
 const StyledComponent = styled(Component)`
-  color: red;
+  color: white;
+  & > h1 {
+    font-size: 40px;
+    text-align: center;
+  }
 `;
 
 export const getStaticProps: GetStaticProps = async (context) => {
