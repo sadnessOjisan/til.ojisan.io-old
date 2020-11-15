@@ -4,6 +4,7 @@ import { PostListItem } from "../components/PostListItem";
 import { Layout } from "../components/Layout";
 import { createPostForView, PostViewType } from "../entity/Post";
 import { getPosts } from "../repository/getPosts";
+import { Color } from "../const/color";
 
 type Props = {
   posts?: PostViewType[];
@@ -14,7 +15,9 @@ type Props = {
 const Component = (props: Props) => (
   <Layout>
     <div className={props.className}>
-      <h1>Today Ojisan Learned</h1>
+      <h1>
+        <span>T</span>oday oj<span>I</span>san <span>L</span>earned
+      </h1>
       {props.posts
         ? props.posts.map((post) => <PostListItem post={post}></PostListItem>)
         : JSON.stringify(props.error)}
@@ -27,6 +30,9 @@ const StyledComponent = styled(Component)`
   & > h1 {
     font-size: 40px;
     text-align: center;
+    & > span {
+      color: ${Color.highlight};
+    }
   }
 `;
 

@@ -17,7 +17,7 @@ export const usePostTil = (): [
   const [token, setToken] = useState<string | null>(null);
   const [body, setBody] = useState<SubmitPostType | null>(null);
   useEffect(() => {
-    if (body === null || token === null) return;
+    if (body === null || token === null || sending === false) return;
     Fetch(`api/postTil`, {
       method: "POST",
       headers: {

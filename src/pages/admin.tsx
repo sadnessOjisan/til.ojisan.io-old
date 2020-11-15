@@ -44,12 +44,18 @@ const Component = (props: Props) => (
                   props.handlePost(e, props.token);
                 }}
               >
-                <label>title</label>
-                <input name="title" type="text"></input>
-                <label>content</label>
-                <textarea name="content"></textarea>
-                <label>tags</label>
-                <input name="tags" type="text"></input>
+                <div>
+                  <label>title</label>
+                  <input name="title" type="text"></input>
+                </div>
+                <div>
+                  <label>content</label>
+                  <textarea name="content" cols={100} rows={30}></textarea>
+                </div>
+                <div>
+                  <label>tags</label>
+                  <input name="tags" type="text"></input>
+                </div>
                 <button type="submit">submit</button>
               </form>
             )}
@@ -76,7 +82,16 @@ const Component = (props: Props) => (
 );
 
 const StyledComponent = styled(Component)`
-  color: red;
+  & input {
+    width: 300px;
+    height: 30px;
+    margin: 12px;
+  }
+
+  & button {
+    width: 100px;
+    height: 60px;
+  }
 `;
 
 const ContainerComponent = () => {

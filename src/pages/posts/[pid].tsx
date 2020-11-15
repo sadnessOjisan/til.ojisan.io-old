@@ -1,5 +1,7 @@
 import { GetStaticProps } from "next";
 import styled from "styled-components";
+import { Layout } from "../../components/Layout";
+import { Post } from "../../components/Post";
 import { createPostForView, PostType, PostViewType } from "../../entity/Post";
 import { getPostById } from "../../repository/getPost";
 import { getPostIds } from "../../repository/getPostIds";
@@ -11,26 +13,20 @@ type Props = {
 };
 
 const Component = (props: Props) => (
-  <div className={props.className}>
-    {props.post ? (
-      <div>
-        <h1>{props.post.title}</h1>
-        <p>
-          {props.post.tags.map((tag) => (
-            <div>{tag.name}</div>
-          ))}
-        </p>
-        <p>{props.post.createdAt}</p>
-        <div dangerouslySetInnerHTML={{ __html: props.post.content }}></div>
-      </div>
-    ) : (
-      JSON.stringify(props.error)
-    )}
-  </div>
+  <Layout>
+    <div className={props.className}>
+      {props.post ? (
+        <Post post={props.post}></Post>
+      ) : (
+        JSON.stringify(props.error)
+      )}
+    </div>
+  </Layout>
 );
 
 const StyledComponent = styled(Component)`
-  color: red;
+  padding: 12px;
+  color: white;
 `;
 
 export const getStaticProps: GetStaticProps = async (context) => {
