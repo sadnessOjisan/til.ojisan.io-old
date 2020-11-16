@@ -4,8 +4,8 @@ import { ApiResponseType } from "../type/util";
 
 export const getPosts = async (): Promise<ApiResponseType<PostDTO[]>> => {
   try {
-    const documents = await store.collection("posts").get();
-    const posts = documents.docs.map((d) => {
+    const snapshot = await store.collection("posts").get();
+    const posts = snapshot.docs.map((d) => {
       const post = {
         id: d.id,
         ...d.data(),
