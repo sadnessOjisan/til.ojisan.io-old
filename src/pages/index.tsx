@@ -39,9 +39,16 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const postResponse = await getPosts();
   const { data, error } = postResponse;
+  if (error) {
+    return {
+      // HACK: undefined は埋め込めないため
+      props: { error },
+      revalidate: 1,
+    };
+  }
 
   const viewData = await Promise.all(
     data.map(async (d) => {

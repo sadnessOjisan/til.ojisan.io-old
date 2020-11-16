@@ -6,6 +6,7 @@ export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
 export type ISOStringType = string & { __isoString: never };
 export type FormattedDateType = string & { __formattedDateString: never };
+export type ValidDateType = string & { __validDateString: never };
 export type HTMLContentType = string & { __htmlString: never };
 
 export type PostType = {
@@ -20,26 +21,45 @@ export type PostType = {
  * firestore からの取得
  * TODO: repositoryに定義
  */
-export type PostDTO = Omit<PostType, "tags"> & {
+export type PostDTO = Omit<PostType, "tags" | "createdAt"> & {
   tags: string[];
+  createdAt: FirebaseFirestore.FieldValue;
 };
 
 export type PostViewType = Omit<PostType, "createdAt"> & {
   createdAt: FormattedDateType;
 };
 
-const isValidDate = (date: string) => {
-  return dayjs(date).isValid();
+export const isValidDate = (date: unknown): date is ValidDateType => {
+  return dayjs(date as any).isValid();
 };
 
-const createFormattedDate = (
-  date: string,
+export const isValidDates = (data: unknown): data is ValidDateType[] => {
+  if (!Array.isArray(data)) return false;
+  for (const d of data) {
+    if (!isValidDate(d)) return false;
+  }
+  return true;
+};
+
+export const createValidDate = (date: Date): ValidDateType => {
+  console.log("date", date);
+  return dayjs(date).format() as ValidDateType;
+};
+
+export const createFormattedDate = (
+  date: ValidDateType,
   isHour: boolean
 ): FormattedDateType => {
-  if (!isValidDate) throw new Error("invalid date");
   return isHour
     ? (dayjs(date).format("YYYY年M月D日 hh時mm分") as FormattedDateType)
     : (dayjs(date).format("YYYY年M月D日") as FormattedDateType);
+};
+
+export const createURLFormattedDate = (
+  date: ValidDateType
+): FormattedDateType => {
+  return dayjs(date).format("YYYY-MM-DD") as FormattedDateType;
 };
 
 export const createPostForView = (
@@ -47,8 +67,9 @@ export const createPostForView = (
   tags: TagType[],
   isHour: boolean
 ): PostViewType => {
-  const formattedDate = createFormattedDate(post.createdAt, isHour);
-  return { ...post, createdAt: formattedDate, tags };
+  const createdAt = createValidDate(post.createdAt.toDate());
+  const date = createFormattedDate(createdAt, false);
+  return { ...post, createdAt: date, tags };
 };
 
 export type DocumentFieldData = Omit<PostType, "id">;
@@ -59,7 +80,7 @@ export type FormPostType = Omit<PostType, "id" | "createdAt">;
 export type SubmitPostType = {
   title: string;
   content: string;
-  createdAt: string;
+  createdAt: FirebaseFirestore.FieldValue;
   tags: string[];
 };
 
@@ -79,7 +100,8 @@ export const isPost = (data: any): data is PostType => {
 export const isPostDTO = (data: any): data is PostDTO => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
-  if (!isValidDate(data.createdAt)) return false;
+  console.log("data.createdAt,", data.createdAt);
+  if (!isValidDate(dayjs(data.createdAt.toDate()).format())) return false;
   if (!isStringArray(data.tags)) return false;
   return true;
 };

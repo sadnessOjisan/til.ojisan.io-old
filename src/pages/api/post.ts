@@ -51,7 +51,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     const postBody: SubmitPostType = {
       title: body.title,
       content: body.content,
-      createdAt: dayjs().format(),
+      createdAt: Admin.firestore.FieldValue.serverTimestamp(),
       tags: createdTagIds,
     };
 
