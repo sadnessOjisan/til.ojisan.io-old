@@ -25,13 +25,20 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     promises = body.tags.map(async (tag) => {
       // 既存 tag が無い時だけ作成する
       const tagName = tag.name;
-      const query = await store
+      const snapshot = await store
         .collection("tags")
         .where("name", "==", tagName)
         .get();
-      if (query.empty) {
+      if (snapshot.empty) {
         const createdTagRef = await store.collection("tags").add(tag);
         const id = createdTagRef.id;
+        createdTagIds.push(id);
+      } else {
+        const ids = snapshot.docs.map((d) => d.id);
+        if (ids.length !== 1) {
+          throw new Error("invalid data");
+        }
+        const id = ids[0];
         createdTagIds.push(id);
       }
     });
