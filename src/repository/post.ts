@@ -3,19 +3,19 @@ import {
   HTMLContentType,
   isPost,
   PostType,
-  SubmitPostType,
+  FormPostType,
 } from "../entity/Post";
 import { Fetch } from "../infra/fetch";
 
 export const usePostTil = (): [
   boolean,
-  (body: SubmitPostType, token: string) => void,
+  (body: FormPostType, token: string) => void,
   string
 ] => {
   const [sending, setSendingState] = useState(false);
   const [error, setErrorMessage] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [body, setBody] = useState<SubmitPostType | null>(null);
+  const [body, setBody] = useState<FormPostType | null>(null);
   useEffect(() => {
     if (body === null || token === null || sending === false) return;
     Fetch(`api/postTil`, {
@@ -44,7 +44,7 @@ export const usePostTil = (): [
   }, [sending]);
 
   const post = useCallback(
-    (body: SubmitPostType, token: string): void => {
+    (body: FormPostType, token: string): void => {
       setBody(body);
       setToken(token);
       setSendingState(true);

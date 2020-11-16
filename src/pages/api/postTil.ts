@@ -1,7 +1,12 @@
 import dayjs from "dayjs";
+import { create } from "domain";
 import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import { isSubmitPostType } from "../../entity/Post";
+import {
+  isSubmitPostType,
+  SubmitPostTypeWithoutTagsType,
+} from "../../entity/Post";
+import { SubmitTagType } from "../../entity/Tag";
 import { store } from "../../infra/FirebaseServer";
 
 export default async (req: NextApiRequest, response: NextApiResponse) => {
@@ -18,16 +23,45 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     console.error("invalid body: ", body);
     throw new Error("invalid request");
   }
-  const bodyWithTimeStamp = {
-    ...body,
-    createdAt: dayjs().format(),
-  };
+
+  const createdTagIds: string[] = [];
+  let promises;
+  // tag の保存
   try {
-    await store.collection("posts").add(bodyWithTimeStamp);
-    response.status(204);
-    response.json({});
+    promises = body.tags.map(async (tag) => {
+      // 既存 tag が無い時だけ作成する
+      const tagName = tag.name;
+      const query = await store
+        .collection("tags")
+        .where("name", "==", tagName)
+        .get();
+      if (query.empty) {
+        const createdTagRef = await store.collection("tags").add(tag);
+        const id = createdTagRef.id;
+        createdTagIds.push(id);
+      }
+    });
   } catch (e) {
     response.status(500);
     response.json({ error: e });
+    return;
   }
+  Promise.all(promises).then(async () => {
+    const postBody: SubmitPostTypeWithoutTagsType = {
+      title: body.title,
+      content: body.content,
+      createdAt: dayjs().format(),
+      tags: createdTagIds,
+    };
+
+    // post の保存
+    try {
+      await store.collection("posts").add(postBody);
+      response.status(204);
+      response.json({});
+    } catch (e) {
+      response.status(500);
+      response.json({ error: e });
+    }
+  });
 };

@@ -43,7 +43,11 @@ export const createPostForView = (
 };
 
 export type DocumentFieldData = Omit<PostType, "id">;
-export type SubmitPostType = Omit<PostType, "id" | "createdAt">;
+export type FormPostType = Omit<PostType, "id" | "createdAt">;
+export type SubmitPostType = DocumentFieldData & {
+  // firestoreのref
+  tags: string[];
+};
 
 export const createHTMLString = (md: string): HTMLContentType => {
   return marked(md);
@@ -64,7 +68,7 @@ export const isPostDocumentFieldData = (
   return true;
 };
 
-export const isSubmitPostType = (data: any): data is SubmitPostType => {
+export const isSubmitPostType = (data: any): data is FormPostType => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
   return true;

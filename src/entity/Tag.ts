@@ -4,6 +4,10 @@ export type TagType = {
   innerColor: string;
 };
 
+export type SubmitTagType = TagType & {
+  createdAt: string;
+};
+
 export const isTag = (data: any): data is TagType => {
   if (typeof data.name !== "string") return false;
   if (typeof data.backgroundColor !== "string") return false;
