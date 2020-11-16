@@ -1,13 +1,18 @@
 import dayjs from "dayjs";
-import { FormPostType, isSubmitPostType, SubmitPostType } from "../entity/Post";
-import { Admin, store } from "../infra/FirebaseServer";
+import { NextApiRequest, NextApiResponse } from "next";
+import { isSubmitPostType, SubmitPostType } from "../../entity/Post";
+import { Admin, store } from "../../infra/FirebaseServer";
 
-export const postTil = async (body: FormPostType, token: string) => {
-  const decodedToken = await Admin.auth().verifyIdToken(token);
+export default async (req: NextApiRequest, response: NextApiResponse) => {
+  const { headers } = req;
+  const idToken = headers.authorization;
+  const decodedToken = await Admin.auth().verifyIdToken(idToken);
   const { uid } = decodedToken;
   if (uid !== process.env.ADMIN_USER_ID) {
-    throw new Error("invalid user");
+    response.status(404);
+    response.json({ error: "invalid user token" });
   }
+  const { body } = req;
   if (!isSubmitPostType(body)) {
     console.error("invalid body: ", body);
     throw new Error("invalid request");
@@ -31,7 +36,8 @@ export const postTil = async (body: FormPostType, token: string) => {
       }
     });
   } catch (e) {
-    console.error(e);
+    response.status(500);
+    response.json({ error: e });
     return;
   }
   Promise.all(promises).then(async () => {
@@ -45,9 +51,11 @@ export const postTil = async (body: FormPostType, token: string) => {
     // post の保存
     try {
       await store.collection("posts").add(postBody);
+      response.status(204);
+      response.json({});
     } catch (e) {
-      console.error(e);
-      return;
+      response.status(500);
+      response.json({ error: e });
     }
   });
 };

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { FormPostType } from "../entity/Post";
-import { postTil } from "../repository/post";
+import { Fetch } from "../infra/fetch";
 
 export const usePostTil = (): [
   boolean,
@@ -13,8 +13,21 @@ export const usePostTil = (): [
   const [body, setBody] = useState<FormPostType | null>(null);
   useEffect(() => {
     if (body === null || token === null || sending === false) return;
-    postTil(body, token)
-      .then(() => {
+    Fetch(`api/post`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          console.error(res);
+          setErrorMessage("fail post");
+          setSendingState(false);
+          return;
+        }
         setErrorMessage(null);
         setSendingState(false);
       })
