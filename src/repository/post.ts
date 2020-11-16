@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  HTMLContentType,
-  isPost,
-  PostType,
-  FormPostType,
-} from "../entity/Post";
+import { FormPostType } from "../entity/Post";
 import { Fetch } from "../infra/fetch";
 
 export const usePostTil = (): [
@@ -28,7 +23,7 @@ export const usePostTil = (): [
     })
       .then((res) => {
         if (res.status !== 200) {
-          console.log(res);
+          console.error(res);
           setErrorMessage("fail post");
           setSendingState(false);
           return;
@@ -37,7 +32,7 @@ export const usePostTil = (): [
         setSendingState(false);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setErrorMessage("fail post");
         setSendingState(false);
       });

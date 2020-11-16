@@ -17,7 +17,6 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       .collection("tags")
       .where(admin.firestore.FieldPath.documentId(), "in", parsedIds)
       .get();
-    console.log("parsedIds: ", parsedIds);
     const tags = documents.docs.map((d) => {
       return d.data();
     });
