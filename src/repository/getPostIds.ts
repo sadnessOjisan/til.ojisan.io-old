@@ -1,6 +1,6 @@
 import { isIds, PostIdsType, PostType } from "../entity/Post";
-import { Fetch } from "../infra/fetch";
 import { store } from "../infra/FirebaseServer";
+import { Fetch } from "../infra/fetch";
 import { ApiResponseType } from "../type/util";
 
 export const getPostIds = async (): Promise<ApiResponseType<PostIdsType>> => {
