@@ -44,8 +44,12 @@ export const createPostForView = (
 
 export type DocumentFieldData = Omit<PostType, "id">;
 export type FormPostType = Omit<PostType, "id" | "createdAt">;
-export type SubmitPostType = DocumentFieldData & {
-  // firestoreのref
+
+// DTO
+export type SubmitPostType = {
+  title: string;
+  content: string;
+  createdAt: string;
   tags: string[];
 };
 

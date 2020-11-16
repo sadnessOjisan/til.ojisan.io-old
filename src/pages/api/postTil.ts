@@ -1,11 +1,7 @@
 import dayjs from "dayjs";
-import { create } from "domain";
 import * as admin from "firebase-admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  isSubmitPostType,
-  SubmitPostTypeWithoutTagsType,
-} from "../../entity/Post";
+import { isSubmitPostType, SubmitPostType } from "../../entity/Post";
 import { SubmitTagType } from "../../entity/Tag";
 import { store } from "../../infra/FirebaseServer";
 
@@ -25,7 +21,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
   }
 
   const createdTagIds: string[] = [];
-  let promises;
+  let promises: Promise<void>[];
   // tag の保存
   try {
     promises = body.tags.map(async (tag) => {
@@ -47,7 +43,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     return;
   }
   Promise.all(promises).then(async () => {
-    const postBody: SubmitPostTypeWithoutTagsType = {
+    const postBody: SubmitPostType = {
       title: body.title,
       content: body.content,
       createdAt: dayjs().format(),
