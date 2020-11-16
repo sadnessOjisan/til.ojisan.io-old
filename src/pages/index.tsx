@@ -51,9 +51,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
     })
   );
 
+  const sortedData = viewData.sort((a, b) =>
+    a.createdAt < b.createdAt ? 1 : -1
+  );
+
   return {
     // HACK: undefined は埋め込めないため
-    props: !error ? { posts: viewData } : { error },
+    props: !error ? { posts: sortedData } : { error },
     revalidate: 1,
   };
 };
