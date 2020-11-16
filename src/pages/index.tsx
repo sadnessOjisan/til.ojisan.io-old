@@ -5,6 +5,7 @@ import { PostListItem } from "../components/PostListItem";
 import { Color } from "../const/color";
 import { createPostForView, PostViewType } from "../entity/Post";
 import { getPosts } from "../repository/getPosts";
+import { getTags } from "../repository/getTags";
 
 type Props = {
   posts?: PostViewType[];
@@ -41,7 +42,15 @@ const StyledComponent = styled(Component)`
 export const getStaticProps: GetStaticProps = async (context) => {
   const postResponse = await getPosts();
   const { data, error } = postResponse;
-  const viewData = data.map((d) => createPostForView(d, false));
+
+  const viewData = await Promise.all(
+    data.map(async (d) => {
+      const tagsResponse = await getTags(d.tags);
+      const tagData = tagsResponse.data;
+      return createPostForView(d, tagData, false);
+    })
+  );
+
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { posts: viewData } : { error },

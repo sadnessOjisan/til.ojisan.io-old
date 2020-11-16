@@ -1,13 +1,13 @@
-import { isPost, PostDTO, PostType } from "../entity/Post";
+import { TagType } from "../entity/Tag";
 import { Fetch } from "../infra/fetch";
 import { ApiResponseType } from "../type/util";
 
-export const getPostById = async (
-  pid: string
-): Promise<ApiResponseType<PostDTO>> => {
-  const response = await Fetch(`api/posts/${pid}`);
+export const getTags = async (
+  ids: string[]
+): Promise<ApiResponseType<TagType[]>> => {
+  const queryStrings = JSON.stringify(ids);
+  const response = await Fetch(`api/tags/getByIds?ids=${queryStrings}`);
   if (response.status !== 200) {
-    console.log("<getPostById> response:", response);
     return { data: undefined, error: "invalid status error" };
   }
   const data = await response.json();

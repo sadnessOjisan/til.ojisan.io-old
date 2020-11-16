@@ -64,4 +64,4 @@ export async function getStaticPaths() {
   };
 }
 
-export default StyledComponent;
+export default ContainerComponent;

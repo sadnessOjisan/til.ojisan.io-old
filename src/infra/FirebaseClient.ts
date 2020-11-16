@@ -21,6 +21,7 @@ export default class Firebase {
   private _app: firebase.app.App;
   private _db: firebase.firestore.Firestore;
   private _auth: firebase.auth.Auth;
+  private _firestore: typeof firebase.firestore;
 
   private constructor() {
     // https://github.com/zeit/next.js/issues/1999#issuecomment-302244429
@@ -35,6 +36,7 @@ export default class Firebase {
     this._app = firebase.app();
     this._db = firebase.firestore();
     this._auth = firebase.auth();
+    this._firestore = firebase.firestore;
   }
 
   init() {
@@ -73,6 +75,15 @@ export default class Firebase {
     } else {
       this._auth = firebase.auth();
       return this._auth;
+    }
+  }
+
+  public get firestore() {
+    if (this._firestore) {
+      return this._firestore;
+    } else {
+      this._firestore = firebase.firestore;
+      return this._firestore;
     }
   }
 }
