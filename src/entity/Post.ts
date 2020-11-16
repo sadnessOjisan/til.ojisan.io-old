@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import marked from "marked";
-import { TagType, isTags } from "./Tag";
+import { TagType, isTags, isTagsDTO } from "./Tag";
 
 export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
@@ -14,6 +14,14 @@ export type PostType = {
   content: HTMLContentType;
   createdAt: ISOStringType;
   tags: TagType[];
+};
+
+/**
+ * firestore からの取得
+ * TODO: repositoryに定義
+ */
+export type PostDTO = Omit<PostType, "tags"> & {
+  tags: string[];
 };
 
 export type PostViewType = Omit<PostType, "createdAt"> & {
@@ -35,15 +43,25 @@ const createFormattedDate = (
 };
 
 export const createPostForView = (
-  post: PostType,
+  post: PostDTO,
+  tags: TagType[],
   isHour: boolean
 ): PostViewType => {
   const formattedDate = createFormattedDate(post.createdAt, isHour);
-  return { ...post, createdAt: formattedDate };
+  return { ...post, createdAt: formattedDate, tags };
 };
 
 export type DocumentFieldData = Omit<PostType, "id">;
-export type SubmitPostType = Omit<PostType, "id" | "createdAt">;
+
+export type FormPostType = Omit<PostType, "id" | "createdAt">;
+
+// DTO
+export type SubmitPostType = {
+  title: string;
+  content: string;
+  createdAt: string;
+  tags: string[];
+};
 
 export const createHTMLString = (md: string): HTMLContentType => {
   return marked(md);
@@ -51,20 +69,38 @@ export const createHTMLString = (md: string): HTMLContentType => {
 
 export const isPost = (data: any): data is PostType => {
   if (typeof data.id !== "string") return false;
-  return isPostDocumentFieldData(data);
+  return isPostDTO(data);
 };
 
-export const isPostDocumentFieldData = (
-  data: any
-): data is DocumentFieldData => {
+/**
+ * firestore から取得したdataが正当化チェック
+ * @param data
+ */
+export const isPostDTO = (data: any): data is PostDTO => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
   if (!isValidDate(data.createdAt)) return false;
-  if (!isTags(data.tags)) return false;
+  if (!isStringArray(data.tags)) return false;
   return true;
 };
 
-export const isSubmitPostType = (data: any): data is SubmitPostType => {
+export const isPostDTOS = (data: any): data is PostDTO[] => {
+  if (!Array.isArray(data)) return false;
+  for (const d of data) {
+    if (!isPostDTO(d)) return false;
+  }
+  return true;
+};
+
+export const isStringArray = (data: any): data is string[] => {
+  if (!Array.isArray(data)) return false;
+  for (const d of data) {
+    if (typeof d !== "string") return false;
+  }
+  return true;
+};
+
+export const isSubmitPostType = (data: any): data is FormPostType => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
   return true;

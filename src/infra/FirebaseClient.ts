@@ -5,14 +5,14 @@ import "firebase/firestore";
 
 export const genFirebaseConfig = () => {
   return {
-    apiKey: "AIzaSyBemTfP2cFFlzmDyEgL1Hxae65tdQ2dQEo",
-    authDomain: "til-ojisan-io.firebaseapp.com",
-    databaseURL: "https://til-ojisan-io.firebaseio.com",
-    projectId: "til-ojisan-io",
-    storageBucket: "til-ojisan-io.appspot.com",
-    messagingSenderId: "8298529712",
-    appId: "1:8298529712:web:2bb6ae15543aae76540c75",
-    measurementId: "G-CB63TJM4F5",
+    apiKey: process.env.NEXT_PUBLIC_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+    databaseURL: process.env.NEXT_PUBLIC_DATABASE_URL,
+    projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_MESUREMENT_ID,
   };
 };
 
@@ -21,6 +21,7 @@ export default class Firebase {
   private _app: firebase.app.App;
   private _db: firebase.firestore.Firestore;
   private _auth: firebase.auth.Auth;
+  private _firestore: typeof firebase.firestore;
 
   private constructor() {
     // https://github.com/zeit/next.js/issues/1999#issuecomment-302244429
@@ -35,6 +36,7 @@ export default class Firebase {
     this._app = firebase.app();
     this._db = firebase.firestore();
     this._auth = firebase.auth();
+    this._firestore = firebase.firestore;
   }
 
   init() {
@@ -73,6 +75,15 @@ export default class Firebase {
     } else {
       this._auth = firebase.auth();
       return this._auth;
+    }
+  }
+
+  public get firestore() {
+    if (this._firestore) {
+      return this._firestore;
+    } else {
+      this._firestore = firebase.firestore;
+      return this._firestore;
     }
   }
 }
