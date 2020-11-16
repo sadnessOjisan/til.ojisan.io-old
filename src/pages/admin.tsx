@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { createHTMLString } from "../entity/Post";
 import { createTag } from "../entity/Tag";
 import Firebase from "../infra/FirebaseClient";
-import { usePostTil } from "../repository/post";
+import { usePostTil } from "../hooks/usePostTil";
 import { signin } from "../repository/signin";
 
 interface ContainerProps {

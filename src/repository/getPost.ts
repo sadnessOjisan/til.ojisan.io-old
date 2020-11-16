@@ -1,15 +1,19 @@
-import { isPost, PostDTO, PostType } from "../entity/Post";
-import { Fetch } from "../infra/fetch";
+import { isPostDTO, PostDTO } from "../entity/Post";
+import { store } from "../infra/FirebaseServer";
 import { ApiResponseType } from "../type/util";
 
 export const getPostById = async (
   pid: string
 ): Promise<ApiResponseType<PostDTO>> => {
-  const response = await Fetch(`api/posts/${pid}`);
-  if (response.status !== 200) {
-    console.error("<getPostById> response:", response);
-    return { data: undefined, error: "invalid status error" };
+  try {
+    const snapshot = await store.collection("posts").doc(pid).get();
+    const data = await snapshot.data();
+    if (!isPostDTO(data)) {
+      console.error("<getPostById> invalid data struct: ", data);
+      return { data: undefined, error: "invalid format data" };
+    }
+    return { data, error: undefined };
+  } catch (e) {
+    return { data: undefined, error: e };
   }
-  const data = await response.json();
-  return { data, error: undefined };
 };

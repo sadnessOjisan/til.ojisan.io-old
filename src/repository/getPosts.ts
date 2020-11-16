@@ -1,18 +1,23 @@
-import { isPost, isPostDTOS, isPosts, PostDTO, PostType } from "../entity/Post";
-import { Fetch } from "../infra/fetch";
+import { isPostDTOS, PostDTO } from "../entity/Post";
+import { store } from "../infra/FirebaseServer";
 import { ApiResponseType } from "../type/util";
 
 export const getPosts = async (): Promise<ApiResponseType<PostDTO[]>> => {
-  const response = await Fetch(`api/posts`);
-  if (response.status !== 200) {
-    console.error("<getPosts> response:", response);
-    return { data: undefined, error: "invalid status error" };
-  }
-  const data = await response.json();
-  if (isPostDTOS(data)) {
-    return { data: data, error: undefined };
-  } else {
-    console.error("<getPosts> invalid data struct: ", data);
-    return { data: undefined, error: "invalid data struct" };
+  try {
+    const documents = await store.collection("posts").get();
+    const posts = documents.docs.map((d) => {
+      const post = {
+        id: d.id,
+        ...d.data(),
+      };
+      return post;
+    });
+    if (!isPostDTOS(posts)) {
+      console.error("<getPosts> invalid data struct: ", posts);
+      return { data: undefined, error: "invalid data struct" };
+    }
+    return { data: posts, error: undefined };
+  } catch (e) {
+    return { data: undefined, error: e };
   }
 };

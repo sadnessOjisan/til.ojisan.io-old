@@ -26,3 +26,4 @@ try {
 
 export const Admin = admin;
 export const store = admin.firestore();
+export const FieldPath = admin.firestore.FieldPath;

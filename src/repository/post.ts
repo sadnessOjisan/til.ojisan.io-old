@@ -1,51 +1,53 @@
-import { useCallback, useEffect, useState } from "react";
-import { FormPostType } from "../entity/Post";
-import { Fetch } from "../infra/fetch";
+import dayjs from "dayjs";
+import { FormPostType, isSubmitPostType, SubmitPostType } from "../entity/Post";
+import { Admin, store } from "../infra/FirebaseServer";
 
-export const usePostTil = (): [
-  boolean,
-  (body: FormPostType, token: string) => void,
-  string
-] => {
-  const [sending, setSendingState] = useState(false);
-  const [error, setErrorMessage] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [body, setBody] = useState<FormPostType | null>(null);
-  useEffect(() => {
-    if (body === null || token === null || sending === false) return;
-    Fetch(`api/postTil`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-      body: JSON.stringify(body),
-    })
-      .then((res) => {
-        if (res.status !== 200) {
-          console.error(res);
-          setErrorMessage("fail post");
-          setSendingState(false);
-          return;
-        }
-        setErrorMessage(null);
-        setSendingState(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setErrorMessage("fail post");
-        setSendingState(false);
-      });
-  }, [sending]);
+export const postTil = async (body: FormPostType, token: string) => {
+  const decodedToken = await Admin.auth().verifyIdToken(token);
+  const { uid } = decodedToken;
+  if (uid !== process.env.ADMIN_USER_ID) {
+    throw new Error("invalid user");
+  }
+  if (!isSubmitPostType(body)) {
+    console.error("invalid body: ", body);
+    throw new Error("invalid request");
+  }
 
-  const post = useCallback(
-    (body: FormPostType, token: string): void => {
-      setBody(body);
-      setToken(token);
-      setSendingState(true);
-    },
-    [token, body]
-  );
+  const createdTagIds: string[] = [];
+  let promises: Promise<void>[];
+  // tag の保存
+  try {
+    promises = body.tags.map(async (tag) => {
+      // 既存 tag が無い時だけ作成する
+      const tagName = tag.name;
+      const query = await store
+        .collection("tags")
+        .where("name", "==", tagName)
+        .get();
+      if (query.empty) {
+        const createdTagRef = await store.collection("tags").add(tag);
+        const id = createdTagRef.id;
+        createdTagIds.push(id);
+      }
+    });
+  } catch (e) {
+    console.error(e);
+    return;
+  }
+  Promise.all(promises).then(async () => {
+    const postBody: SubmitPostType = {
+      title: body.title,
+      content: body.content,
+      createdAt: dayjs().format(),
+      tags: createdTagIds,
+    };
 
-  return [sending, post, error];
+    // post の保存
+    try {
+      await store.collection("posts").add(postBody);
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  });
 };
