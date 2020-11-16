@@ -13,7 +13,7 @@ export const usePostTil = (): [
   const [body, setBody] = useState<FormPostType | null>(null);
   useEffect(() => {
     if (body === null || token === null || sending === false) return;
-    Fetch(`api/postTil`, {
+    Fetch(`api/post`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

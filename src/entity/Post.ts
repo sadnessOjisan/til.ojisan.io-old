@@ -103,6 +103,7 @@ export const isStringArray = (data: any): data is string[] => {
 export const isSubmitPostType = (data: any): data is FormPostType => {
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
+  if (!isTags(data.tags)) return false;
   return true;
 };
 

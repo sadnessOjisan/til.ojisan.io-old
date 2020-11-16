@@ -74,7 +74,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export async function getStaticPaths() {
   const postIdsResponse = await getPostIds();
   const { data, error } = postIdsResponse;
-  console.log("data", data);
   return {
     // / を忘れるな
     paths: !error ? data.map((id) => `/posts/${id}`) : [],
