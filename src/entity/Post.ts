@@ -43,7 +43,6 @@ export const isValidDates = (data: unknown): data is ValidDateType[] => {
 };
 
 export const createValidDate = (date: Date): ValidDateType => {
-  console.log("date", date);
   return dayjs(date).format() as ValidDateType;
 };
 
@@ -67,6 +66,7 @@ export const createPostForView = (
   tags: TagType[],
   isHour: boolean
 ): PostViewType => {
+  // @ts-ignore
   const createdAt = createValidDate(post.createdAt.toDate());
   const date = createFormattedDate(createdAt, false);
   return { ...post, createdAt: date, tags };
@@ -101,7 +101,6 @@ export const isPostDTO = (data: any): data is PostDTO => {
   if (typeof data.id !== "string") return false;
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
-  console.log("data.createdAt,", data.createdAt);
   if (!isValidDate(dayjs(data.createdAt.toDate()).format())) return false;
   if (!isStringArray(data.tags)) return false;
   return true;

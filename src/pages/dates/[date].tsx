@@ -1,4 +1,3 @@
-import { GetStaticProps } from "next";
 import styled from "styled-components";
 import { Layout } from "../../components/Layout";
 import { PostListItem } from "../../components/PostListItem";
@@ -50,7 +49,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export async function getStaticProps(context) {
   // YYYY-MM-DD
   const { date } = context.params;
   if (!isValidDate(date)) {
@@ -74,16 +73,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { posts: sortedData, date: date } : { error },
-    revalidate: 3,
+    revalidate: 600,
   };
-};
+}
 
 export async function getStaticPaths() {
   const postAllDatesResponse = await getPostAllDates();
   const { data, error } = postAllDatesResponse;
-  console.log("datadata", data);
   const YYYYMMDDDates = data.map((d) => createURLFormattedDate(d));
-  console.log("YYYYMMDDDates", YYYYMMDDDates);
   return {
     // / を忘れるな
     paths: !error ? YYYYMMDDDates.map((date) => `/dates/${date}`) : [],
