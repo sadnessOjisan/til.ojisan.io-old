@@ -98,6 +98,7 @@ export const isPost = (data: any): data is PostType => {
  * @param data
  */
 export const isPostDTO = (data: any): data is PostDTO => {
+  if (typeof data.id !== "string") return false;
   if (typeof data.title !== "string") return false;
   if (typeof data.content !== "string") return false;
   console.log("data.createdAt,", data.createdAt);

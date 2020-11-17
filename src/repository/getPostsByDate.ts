@@ -18,7 +18,9 @@ export const getPostsByDate = async (
         dayjs(date).set("hour", 23).set("minute", 59).set("second", 59).toDate()
       )
       .get();
-    const data = documents.docs.map((d) => d.data());
+    const data = documents.docs.map((d) => {
+      return { id: d.id, ...d.data() };
+    });
 
     if (!isPostDTOS(data)) {
       console.error("<getPostsByDate> invalid data struct: ", data);

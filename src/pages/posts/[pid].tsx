@@ -59,7 +59,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { pid } = context.params;
   if (typeof pid !== "string") return;
   const postResponse = await getPostById(pid);
+
   const { data, error } = postResponse;
+  if (error) {
+    return { props: { error } };
+  }
   const tagIds = data.tags;
   const tagsResponse = await getTags(tagIds);
   const tagData = tagsResponse.data;

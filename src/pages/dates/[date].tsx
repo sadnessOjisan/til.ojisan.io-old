@@ -22,11 +22,13 @@ type Props = {
 
 const Component = (props: Props) => (
   <Layout>
-    {JSON.stringify(props)}
     <div className={props.className}>
       <h1>
-        {props.date}の<span>T</span>oday oj<span>I</span>san <span>L</span>
-        earned
+        {props.date}の
+        <div>
+          <span>T</span>oday oj<span>I</span>san <span>L</span>
+          earned
+        </div>
       </h1>
       {props.posts
         ? props.posts.map((post) => (
@@ -42,7 +44,7 @@ const StyledComponent = styled(Component)`
   & > h1 {
     font-size: 40px;
     text-align: center;
-    & > span {
+    & > div > span {
       color: ${Color.highlight};
     }
   }
