@@ -1,5 +1,6 @@
 import { GetStaticProps } from "next";
 import { useRouter } from "next/dist/client/router";
+import { Head } from "next/document";
 import styled from "styled-components";
 import { Layout } from "../../components/Layout";
 import { Post } from "../../components/Post";
@@ -19,21 +20,27 @@ interface Props extends InjectedProps {
 }
 
 const Component = (props: Props) => (
-  <Layout>
-    <div className={props.className}>
-      {props.isFallback ? (
-        <div>generating file...</div>
-      ) : (
-        <>
-          {props.post ? (
-            <Post post={props.post}></Post>
-          ) : (
-            JSON.stringify(props.error)
-          )}
-        </>
-      )}
-    </div>
-  </Layout>
+  <>
+    <Head>
+      <title>{props.post?.title}</title>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    </Head>
+    <Layout>
+      <div className={props.className}>
+        {props.isFallback ? (
+          <div>generating file...</div>
+        ) : (
+          <>
+            {props.post ? (
+              <Post post={props.post}></Post>
+            ) : (
+              JSON.stringify(props.error)
+            )}
+          </>
+        )}
+      </div>
+    </Layout>
+  </>
 );
 
 const StyledComponent = styled(Component)`
