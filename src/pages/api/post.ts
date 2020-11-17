@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isSubmitPostType, SubmitPostType } from "../../entity/Post";
 import { Admin, store } from "../../infra/FirebaseServer";

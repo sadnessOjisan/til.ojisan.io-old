@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { isPostDTOS, PostDTO, ValidDateType } from "../entity/Post";
-import Firebase from "../infra/FirebaseClient";
-import { Admin, store } from "../infra/FirebaseServer";
+import { store } from "../infra/FirebaseServer";
 import { ApiResponseType } from "../type/util";
 
 export const getPostsByDate = async (
