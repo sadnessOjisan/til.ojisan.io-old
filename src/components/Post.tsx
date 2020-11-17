@@ -44,6 +44,13 @@ const StyledComponent = styled(Component)`
     display: flex;
     & > * {
       margin-right: 12px;
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+    & > a {
+      text-decoration: none;
     }
   }
   & > .date {

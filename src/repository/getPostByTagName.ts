@@ -22,7 +22,6 @@ export const getPostByTagName = async (
     console.error("<getPostsByDate> error: ", e);
     return { data: undefined, error: e };
   }
-  console.log(tagId);
   try {
     const documents = await store
       .collection("posts")
