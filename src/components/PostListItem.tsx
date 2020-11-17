@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { Color } from "../const/color";
 import { PostViewType } from "../entity/Post";
 
 type PassedPropsType = {
@@ -19,9 +20,11 @@ const Component = (props: Props) => (
         <span className="tags">
           [
           {props.post.tags.map((tag) => (
-            <span className="tag" key={tag.name}>
-              {tag.name}
-            </span>
+            <Link href={`/tags/${tag.name}`} key={tag.name}>
+              <span className="tag" key={tag.name}>
+                {tag.name}
+              </span>
+            </Link>
           ))}
           ]
         </span>
@@ -33,12 +36,16 @@ const Component = (props: Props) => (
 const StyledComponent = styled(Component)`
   color: white;
   margin-top: 12px;
+
   & > a {
     font-size: 16px;
     color: white;
     text-decoration: none;
     & > span {
       margin-left: 18px;
+    }
+    &:hover {
+      color: ${Color.link};
     }
     & > .tags {
       & > .tag {
@@ -50,6 +57,9 @@ const StyledComponent = styled(Component)`
           &::after {
             content: "";
           }
+        }
+        &:hover {
+          text-decoration: underline;
         }
       }
     }

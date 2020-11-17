@@ -1,11 +1,5 @@
-import {
-  createValidDate,
-  FormattedDateType,
-  isValidDates,
-  ValidDateType,
-} from "../entity/Post";
+import { createValidDate, isValidDates, ValidDateType } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
-import { Fetch } from "../infra/fetch";
 import { ApiResponseType } from "../type/util";
 
 export const getPostAllDates = async (): Promise<
