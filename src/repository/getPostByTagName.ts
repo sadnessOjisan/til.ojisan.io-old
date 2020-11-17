@@ -22,11 +22,11 @@ export const getPostByTagName = async (
     console.error("<getPostsByDate> error: ", e);
     return { data: undefined, error: e };
   }
-
+  console.log(tagId);
   try {
     const documents = await store
       .collection("posts")
-      .where("tags", "in", tagId)
+      .where("tags", "array-contains", tagId)
       .get();
 
     const data = documents.docs.map((d) => {

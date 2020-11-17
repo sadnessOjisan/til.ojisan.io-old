@@ -9,6 +9,7 @@ import { getTags } from "../../repository/getTags";
 
 type Props = {
   posts?: PostViewType[];
+  tagName: string;
   error?: string;
   className?: string;
   date?: string;
@@ -18,9 +19,9 @@ const Component = (props: Props) => (
   <Layout>
     <div className={props.className}>
       <h1>
-        {props.date}の
+        #{props.tagName}の
         <div>
-          <span>T</span>oday oj<span>I</span>san <span>L</span>
+          oj<span>I</span>san <span>L</span>
           earned
         </div>
       </h1>
@@ -67,7 +68,7 @@ export async function getStaticProps(context) {
 
   return {
     // HACK: undefined は埋め込めないため
-    props: !error ? { posts: sortedData } : { error },
+    props: !error ? { posts: sortedData, tagName: tag } : { error },
     revalidate: 600,
   };
 }
