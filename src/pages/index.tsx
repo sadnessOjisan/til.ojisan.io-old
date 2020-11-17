@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       // HACK: undefined は埋め込めないため
       props: { error },
-      revalidate: 1,
+      revalidate: 600,
     };
   }
 
@@ -65,7 +65,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { posts: sortedData } : { error },
-    revalidate: 1,
+    revalidate: 600,
   };
 };
 
