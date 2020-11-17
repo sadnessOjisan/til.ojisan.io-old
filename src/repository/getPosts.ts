@@ -18,6 +18,7 @@ export const getPosts = async (): Promise<ApiResponseType<PostDTO[]>> => {
     }
     return { data: posts, error: undefined };
   } catch (e) {
+    console.error("<getPosts>", e);
     return { data: undefined, error: e };
   }
 };

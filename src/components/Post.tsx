@@ -1,6 +1,7 @@
+import Link from "next/link";
 import styled from "styled-components";
 import { Color } from "../const/color";
-import { PostViewType } from "../entity/Post";
+import { createURLFormattedDate, PostViewType } from "../entity/Post";
 import { PostBody } from "./PostBody";
 import { Tag } from "./Tag";
 
@@ -20,7 +21,9 @@ const Component = (props: Props) => (
         <Tag tag={tag} key={tag.name}></Tag>
       ))}
     </div>
-    <p className="date">{props.post.createdAt}</p>
+    <Link href={`/dates/${createURLFormattedDate(props.post.createdAt)}`}>
+      <p className="date">{props.post.formattedCreatedDate}</p>
+    </Link>
     <PostBody content={props.post.content} className="body"></PostBody>
   </div>
 );

@@ -129,8 +129,6 @@ const ContainerComponent = () => {
     post({ title, content: html, tags }, token);
   };
 
-  console.log("user", user);
-
   if (user) {
     user.getIdToken(true).then((d) => {
       setToken(d);

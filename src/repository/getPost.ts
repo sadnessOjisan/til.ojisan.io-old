@@ -7,13 +7,18 @@ export const getPostById = async (
 ): Promise<ApiResponseType<PostDTO>> => {
   try {
     const snapshot = await store.collection("posts").doc(pid).get();
-    const data = await snapshot.data();
+    const documentData = await snapshot.data();
+    const data = {
+      id: snapshot.id,
+      ...documentData,
+    };
     if (!isPostDTO(data)) {
       console.error("<getPostById> invalid data struct: ", data);
       return { data: undefined, error: "invalid format data" };
     }
     return { data, error: undefined };
   } catch (e) {
+    console.error("<getPostById>", e);
     return { data: undefined, error: e };
   }
 };
