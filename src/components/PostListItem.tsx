@@ -20,7 +20,7 @@ const Component = (props: Props) => (
         <span className="tags">
           [
           {props.post.tags.map((tag) => (
-            <Link href={`/tags/${tag.name}`}>
+            <Link href={`/tags/${tag.name}`} key={tag.name}>
               <span className="tag" key={tag.name}>
                 {tag.name}
               </span>
