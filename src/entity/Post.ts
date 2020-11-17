@@ -4,7 +4,6 @@ import { TagType, isTags, isTagsDTO } from "./Tag";
 
 export type PostIdType = string & { __postId: never };
 export type PostIdsType = PostIdType[];
-export type ISOStringType = string & { __isoString: never };
 export type FormattedDateType = string & { __formattedDateString: never };
 export type ValidDateType = string & { __validDateString: never };
 export type HTMLContentType = string & { __htmlString: never };
@@ -13,7 +12,7 @@ export type PostType = {
   id: PostIdType;
   title: string;
   content: HTMLContentType;
-  createdAt: ISOStringType;
+  createdAt: ValidDateType;
   tags: TagType[];
 };
 
@@ -26,8 +25,8 @@ export type PostDTO = Omit<PostType, "tags" | "createdAt"> & {
   createdAt: FirebaseFirestore.FieldValue;
 };
 
-export type PostViewType = Omit<PostType, "createdAt"> & {
-  createdAt: FormattedDateType;
+export type PostViewType = PostType & {
+  formattedCreatedDate: FormattedDateType;
 };
 
 export const isValidDate = (date: unknown): date is ValidDateType => {
@@ -69,7 +68,7 @@ export const createPostForView = (
   // @ts-ignore
   const createdAt = createValidDate(post.createdAt.toDate());
   const date = createFormattedDate(createdAt, false);
-  return { ...post, createdAt: date, tags };
+  return { ...post, createdAt, formattedCreatedDate: date, tags };
 };
 
 export type DocumentFieldData = Omit<PostType, "id">;

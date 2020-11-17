@@ -14,7 +14,7 @@ const Component = (props: Props) => (
   <div className={props.className}>
     <Link href={`/posts/${props.post.id}`}>
       <a>
-        <span className="date">{props.post.createdAt}</span>
+        <span className="date">{props.post.formattedCreatedDate}</span>
         <span>{props.post.title}</span>
         <span className="tags">
           [
