@@ -18,7 +18,11 @@ const Component = (props: Props) => (
     <h1 className="title">{props.post.title}</h1>
     <div className="tags">
       {props.post.tags.map((tag) => (
-        <Tag tag={tag} key={tag.name}></Tag>
+        <Link href={`/tags/${tag.name}`} key={tag.name}>
+          <a>
+            <Tag tag={tag}></Tag>
+          </a>
+        </Link>
       ))}
     </div>
     <Link href={`/dates/${createURLFormattedDate(props.post.createdAt)}`}>
