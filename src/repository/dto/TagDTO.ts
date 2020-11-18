@@ -28,7 +28,7 @@ export const areTagsFirestoreField = (
   data: any
 ): data is TagFirestoreField[] => {
   if (!Array.isArray(data)) return false;
-  for (let d of data) isTagFirestoreField(d);
+  for (const d of data) isTagFirestoreField(d);
   return true;
 };
 
@@ -36,6 +36,6 @@ export const areTagsFirestoreDocument = (
   data: any
 ): data is TagFirestoreDocument[] => {
   if (!Array.isArray(data)) return false;
-  for (let d of data) isTagFirestoreDocument(d);
+  for (const d of data) isTagFirestoreDocument(d);
   return true;
 };

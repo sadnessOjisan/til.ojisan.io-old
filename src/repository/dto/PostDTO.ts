@@ -31,7 +31,7 @@ export const arePostsFirestoreField = (
   data: any
 ): data is PostFirestoreField[] => {
   if (!Array.isArray(data)) return false;
-  for (let d of data) isPostFirestoreField(d);
+  for (const d of data) isPostFirestoreField(d);
   return true;
 };
 
@@ -52,7 +52,7 @@ export const arePostsFirestoreDocument = (
   data: any
 ): data is PostFirestoreDocument[] => {
   if (!Array.isArray(data)) return false;
-  for (let d of data) isPostFirestoreDocument(d);
+  for (const d of data) isPostFirestoreDocument(d);
   return true;
 };
 

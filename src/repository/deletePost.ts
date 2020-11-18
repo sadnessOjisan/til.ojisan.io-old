@@ -1,5 +1,5 @@
-import { DeletePostType, isDeletePostType } from "./dto/PostDTO";
 import { Fetch } from "../infra/fetch";
+import { DeletePostType, isDeletePostType } from "./dto/PostDTO";
 
 export const deletePost = (postId: string, token: string) => {
   const body: DeletePostType = { id: postId };

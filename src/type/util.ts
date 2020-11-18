@@ -55,6 +55,6 @@ export const isValidDate = (date: any): date is ValidDateType => {
 export type FireStoreDocument<T> = T & { id: string };
 
 export const isStringArray = (data: any): data is string[] => {
-  for (let d of data) typeof d !== "string";
+  for (const d of data) typeof d !== "string";
   return true;
 };
