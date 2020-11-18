@@ -1,19 +1,25 @@
-import Link from "next/link";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import { Color } from "../const/color";
-import { PostViewType } from "../entity/Post";
+import { createHTMLString, PostViewType } from "../entity/Post";
 import Firebase from "../infra/FirebaseClient";
-import { deletePost } from "../repository/deletePost";
 import TurndownService from "turndown";
+import { createTag } from "../entity/Tag";
+import { useEditPost } from "../hooks/useEditPost";
+import { Login } from "./Login";
 
 interface PassedProps {
   post: PostViewType;
 }
 
 interface ContainerProps {
-  handleClickDeleteButtonClick: (id: string) => void;
+  user: firebase.User;
+  loading: boolean;
+  error: firebase.auth.Error;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  sending: boolean;
+  postError: string;
 }
 
 interface Props extends PassedProps, ContainerProps {
@@ -24,26 +30,51 @@ const turndownService = new TurndownService();
 
 const Component = (props: Props) => (
   <div className={props.className}>
-    <h1>編集ページ</h1>
-    <div>
-      <label>title</label>
-      <input defaultValue={props.post.title}></input>
-    </div>
-    <div>
-      <label>content</label>
-      <textarea
-        defaultValue={turndownService.turndown(props.post.content)}
-        cols={80}
-        rows={30}
-      ></textarea>
-    </div>
-    <div>
-      <label>tags</label>
-      <input
-        defaultValue={props.post.tags.map((tag) => tag.name).join(",")}
-      ></input>
-    </div>
-    <button onClick={() => {}}>送信</button>
+    {props.loading ? (
+      <div>loading</div>
+    ) : props.error ? (
+      <div>error</div>
+    ) : (
+      <div>
+        {props.user ? (
+          <div>
+            <h1>編集ページ</h1>
+            <form onSubmit={props.handleSubmit}>
+              <div>
+                <label>title</label>
+                <input
+                  name="title"
+                  type="text"
+                  defaultValue={props.post.title}
+                ></input>
+              </div>
+              <div>
+                <label>content</label>
+                <textarea
+                  name="content"
+                  defaultValue={turndownService.turndown(props.post.content)}
+                  cols={80}
+                  rows={30}
+                ></textarea>
+              </div>
+              <div>
+                <label>tags</label>
+                <input
+                  name="tags"
+                  type="text"
+                  defaultValue={props.post.tags
+                    .map((tag) => tag.name)
+                    .join(",")}
+                ></input>
+              </div>
+              <button onClick={() => {}}>送信</button>
+            </form>
+          </div>
+        ) : (
+          <Login></Login>
+        )}
+      </div>
+    )}
   </div>
 );
 
@@ -81,34 +112,47 @@ const StyledComponent = styled(Component)`
 `;
 
 const ContainerComponent = (props: PassedProps) => {
-  const [user] = useAuthState(Firebase.instance.auth);
+  const [user, loading, error] = useAuthState(Firebase.instance.auth);
   const [token, setToken] = useState<string | null>(null);
   // 削除時、SSRした記事をコンポーネントを見えなくするためのフラグ
-  const [isDeleted, setDelete] = useState(false);
+  const [sending, post, postError] = useEditPost();
   if (user) {
     user.getIdToken(true).then((d) => {
       setToken(d);
     });
   }
-  const handleClickDeleteButtonClick = (id: string) => {
-    if (!user || !token) {
-      alert("you should login");
-      return;
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const title = e.target["title"].value;
+    const content = e.target["content"].value;
+    const tagsString = e.target["tags"].value;
+    if (
+      typeof title !== "string" ||
+      typeof content !== "string" ||
+      typeof tagsString !== "string"
+    ) {
+      throw new Error("データがたりません");
     }
-    try {
-      deletePost(id, token);
-    } catch (e) {
-      setDelete(true);
-    }
+    const tags = tagsString
+      .replace(" ", "")
+      .split(",")
+      .map((tag) => createTag(tag));
+    const html = createHTMLString(content);
+    post({ title, content: html, tags, id: props.post.id }, token);
   };
-  const containerProps = { handleClickDeleteButtonClick };
+  const containerProps = {
+    user,
+    loading,
+    error,
+    handleSubmit,
+    sending,
+    postError,
+  };
   return (
-    !isDeleted && (
-      <StyledComponent
-        {...{ ...containerProps }}
-        {...{ ...props }}
-      ></StyledComponent>
-    )
+    <StyledComponent
+      {...{ ...containerProps }}
+      {...{ ...props }}
+    ></StyledComponent>
   );
 };
 

@@ -13,8 +13,7 @@ interface ContainerProps {
   user: firebase.User;
   loading: boolean;
   error: firebase.auth.Error;
-  token?: string;
-  handlePost: (e: FormEvent<HTMLFormElement>, token: string) => void;
+  handlePost: (e: FormEvent<HTMLFormElement>) => void;
   sending: boolean;
   postError: string;
 }
@@ -31,7 +30,7 @@ const Component = (props: Props) => (
       <div>error</div>
     ) : (
       <div>
-        {props.user && props.token ? (
+        {props.user ? (
           <div>
             <Link href="/">posts</Link>
             <h1>post til</h1>
@@ -40,7 +39,7 @@ const Component = (props: Props) => (
             ) : (
               <form
                 onSubmit={(e) => {
-                  props.handlePost(e, props.token);
+                  props.handlePost(e);
                 }}
               >
                 <div>
@@ -85,7 +84,7 @@ const ContainerComponent = () => {
   const [token, setToken] = useState<string | null>(null);
   const [sending, post, postError] = usePostTil();
 
-  const handlePost = (e: FormEvent<HTMLFormElement>, token: string) => {
+  const handlePost = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const title = e.target["title"].value;
     const content = e.target["content"].value;
@@ -114,7 +113,6 @@ const ContainerComponent = () => {
     user,
     loading,
     error,
-    token,
     handlePost,
     sending,
     postError,
