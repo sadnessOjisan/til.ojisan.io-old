@@ -1,9 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { isSubmitPostType, SubmitPostType } from "../../entity/Post";
+import { COLLECTION } from "../../const/firestoreCollection";
+import {
+  isSubmitEditPostType,
+  isSubmitPostType,
+  SubmitEditPostType,
+  SubmitPostType,
+} from "../../entity/Post";
 import { Admin, store } from "../../infra/FirebaseServer";
 
 /**
- * 作成成功: 204
+ * 編集成功: 204
  */
 export default async (req: NextApiRequest, response: NextApiResponse) => {
   const { headers } = req;
@@ -15,7 +21,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     response.json({ error: "invalid user token" });
   }
   const { body } = req;
-  if (!isSubmitPostType(body)) {
+  if (!isSubmitEditPostType(body)) {
     console.error("invalid body: ", body);
     throw new Error("invalid request");
   }
@@ -32,7 +38,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
         .where("name", "==", tagName)
         .get();
       if (snapshot.empty) {
-        const createdTagRef = await store.collection("tags").add(tag);
+        const createdTagRef = await store.collection(COLLECTION.TAGS).add(tag);
         const id = createdTagRef.id;
         createdTagIds.push(id);
       } else {
@@ -50,18 +56,16 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     return;
   }
   Promise.all(promises).then(async () => {
-    const postBody: SubmitPostType = {
+    const postBody: SubmitEditPostType = {
       title: body.title,
       content: body.content,
-      createdAt: Admin.firestore.FieldValue.serverTimestamp(),
       tags: createdTagIds,
     };
 
-    // post の保存
+    // post の編集保存
     try {
-      await store.collection("posts").add(postBody);
+      await store.collection(COLLECTION.POSTS).doc(body.id).update(postBody);
       response.status(204);
-      response.json({});
     } catch (e) {
       response.status(500);
       response.json({ error: e });
