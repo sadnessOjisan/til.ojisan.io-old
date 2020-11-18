@@ -16,7 +16,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     response.json({ error: "invalid user token" });
   }
   const { body } = req;
-  if (!isDeletePostType(body && body.id)) {
+  if (!isDeletePostType(body)) {
     console.error("<deletePost> invalid body: ", body);
     throw new Error("invalid request");
   }
@@ -24,6 +24,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
   try {
     await store.collection(COLLECTION.POSTS).doc(body.id).delete();
     response.status(204);
+    response.json({});
   } catch (e) {
     response.status(500);
     response.json({ error: e });

@@ -4,11 +4,17 @@ import { FormEvent, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import { Login } from "../../components/Login";
-import { createHTMLString } from "../../entity/Post";
+import { PostEditListItem } from "../../components/PostEditListItem";
+import {
+  createHTMLString,
+  createPostForView,
+  PostViewType,
+} from "../../entity/Post";
 import { createTag } from "../../entity/Tag";
 import { usePostTil } from "../../hooks/usePostTil";
 import Firebase from "../../infra/FirebaseClient";
-import { signin } from "../../repository/signin";
+import { getPosts } from "../../repository/getPosts";
+import { getTags } from "../../repository/getTags";
 
 interface ContainerProps {
   user: firebase.User;
@@ -20,7 +26,11 @@ interface ContainerProps {
   postError: string;
 }
 
-interface Props extends ContainerProps {
+interface PassedProps {
+  posts?: PostViewType[];
+}
+
+interface Props extends ContainerProps, PassedProps {
   className?: string;
 }
 
@@ -32,34 +42,11 @@ const Component = (props: Props) => (
       <div>error</div>
     ) : (
       <div>
-        {props.user && props.token ? (
-          <div>
-            <Link href="/">posts</Link>
-            <h1>post til</h1>
-            {props.sending ? (
-              <div>sending</div>
-            ) : (
-              <form
-                onSubmit={(e) => {
-                  props.handlePost(e, props.token);
-                }}
-              >
-                <div>
-                  <label>title</label>
-                  <input name="title" type="text"></input>
-                </div>
-                <div>
-                  <label>content</label>
-                  <textarea name="content" cols={100} rows={30}></textarea>
-                </div>
-                <div>
-                  <label>tags</label>
-                  <input name="tags" type="text"></input>
-                </div>
-                <button type="submit">submit</button>
-              </form>
-            )}
-          </div>
+        <Link href="/admin/new">新規追加</Link>
+        {props.user && props.posts ? (
+          props.posts.map((post) => (
+            <PostEditListItem post={post}></PostEditListItem>
+          ))
         ) : (
           <Login></Login>
         )}
@@ -81,7 +68,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const ContainerComponent = () => {
+const ContainerComponent = (props: PassedProps) => {
   const [user, loading, error] = useAuthState(Firebase.instance.auth);
   const [token, setToken] = useState<string | null>(null);
   const [sending, post, postError] = usePostTil();
@@ -120,7 +107,40 @@ const ContainerComponent = () => {
     sending,
     postError,
   };
-  return <StyledComponent {...{ ...containerProps }}></StyledComponent>;
+  return (
+    <StyledComponent
+      {...{ ...containerProps }}
+      {...{ ...props }}
+    ></StyledComponent>
+  );
+};
+
+export const getServerSideProps = async (context) => {
+  const postResponse = await getPosts();
+  const { data, error } = postResponse;
+  if (error) {
+    return {
+      // HACK: undefined は埋め込めないため
+      props: { error },
+    };
+  }
+
+  const viewData = await Promise.all(
+    data.map(async (d) => {
+      const tagsResponse = await getTags(d.tags);
+      const tagData = tagsResponse.data;
+      return createPostForView(d, tagData, false);
+    })
+  );
+
+  const sortedData = viewData.sort((a, b) =>
+    a.createdAt < b.createdAt ? 1 : -1
+  );
+
+  return {
+    // HACK: undefined は埋め込めないため
+    props: !error ? { posts: sortedData } : { error },
+  };
 };
 
 export default ContainerComponent;

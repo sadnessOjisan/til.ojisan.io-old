@@ -144,8 +144,12 @@ export const isSubmitEditPostType = (data: any): data is FormEditPostType => {
   return true;
 };
 
-export const isDeletePostType = (id: unknown): id is string => {
-  return typeof id === "string";
+export type DeletePostType = {
+  id: string;
+};
+
+export const isDeletePostType = (body: any): body is DeletePostType => {
+  return typeof body.id === "string";
 };
 
 export const isPosts = (data: any): data is PostType[] => {

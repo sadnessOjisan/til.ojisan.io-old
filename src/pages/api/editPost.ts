@@ -66,7 +66,6 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     try {
       await store.collection(COLLECTION.POSTS).doc(body.id).update(postBody);
       response.status(204);
-      response.json({});
     } catch (e) {
       response.status(500);
       response.json({ error: e });
