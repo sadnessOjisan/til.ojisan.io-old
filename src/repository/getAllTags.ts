@@ -1,6 +1,5 @@
-import { isStringArray } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
-import { ApiResponseType } from "../type/util";
+import { ApiResponseType, isStringArray } from "../type/util";
 
 export const getAllTags = async (): Promise<ApiResponseType<string[]>> => {
   try {

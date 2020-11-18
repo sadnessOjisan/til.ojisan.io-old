@@ -1,10 +1,10 @@
 import Link from "next/link";
 import styled from "styled-components";
 import { Color } from "../const/color";
-import { PostViewType } from "../entity/Post";
+import { PostIndexPagePostType } from "../type/ui/Post";
 
 type PassedPropsType = {
-  post: PostViewType;
+  post: PostIndexPagePostType;
 };
 
 interface Props extends PassedPropsType {
@@ -15,7 +15,7 @@ const Component = (props: Props) => (
   <div className={props.className}>
     <Link href={`/posts/${props.post.id}`}>
       <a>
-        <span className="date">{props.post.formattedCreatedDate}</span>
+        <span className="date">{props.post.createdAt}</span>
         <span>{props.post.title}</span>
         <span className="tags">
           [

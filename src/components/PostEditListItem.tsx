@@ -3,12 +3,12 @@ import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import { Color } from "../const/color";
-import { PostViewType } from "../entity/Post";
 import Firebase from "../infra/FirebaseClient";
 import { deletePost } from "../repository/deletePost";
+import { PostIndexPagePostType } from "../type/ui/Post";
 
 interface PassedProps {
-  post: PostViewType;
+  post: PostIndexPagePostType;
 }
 
 interface ContainerProps {
@@ -21,7 +21,7 @@ interface Props extends PassedProps, ContainerProps {
 
 const Component = (props: Props) => (
   <div className={props.className}>
-    <span className="date">{props.post.formattedCreatedDate}</span>
+    <span className="date">{props.post.createdAt}</span>
     <span>{props.post.title}</span>
     <span className="tags">
       [

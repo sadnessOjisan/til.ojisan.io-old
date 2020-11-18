@@ -1,22 +1,30 @@
-import { isPostDTO, PostDTO } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
-import { ApiResponseType } from "../type/util";
+import { ApiResponseType, FireStoreDocument } from "../type/util";
+import {
+  isPostFirestoreDocument,
+  isPostFirestoreField,
+  PostFirestoreField,
+} from "./dto/PostDTO";
 
 export const getPostById = async (
   pid: string
-): Promise<ApiResponseType<PostDTO>> => {
+): Promise<ApiResponseType<FireStoreDocument<PostFirestoreField>>> => {
   try {
     const snapshot = await store.collection("posts").doc(pid).get();
     const documentData = await snapshot.data();
+    if (!isPostFirestoreField(documentData)) {
+      console.error("<getPostById> invalid data struct: ", documentData);
+      return { data: undefined, error: "invalid format data" };
+    }
     const data = {
       id: snapshot.id,
       ...documentData,
     };
-    if (!isPostDTO(data)) {
+    if (!isPostFirestoreDocument(data)) {
       console.error("<getPostById> invalid data struct: ", data);
       return { data: undefined, error: "invalid format data" };
     }
-    return { data, error: undefined };
+    return { data: data, error: undefined };
   } catch (e) {
     console.error("<getPostById>", e);
     return { data: undefined, error: e };

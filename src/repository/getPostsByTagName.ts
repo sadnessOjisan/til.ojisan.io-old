@@ -1,10 +1,13 @@
-import { isPostDTOS, PostDTO } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
 import { ApiResponseType } from "../type/util";
+import {
+  arePostsFirestoreDocument,
+  PostFirestoreDocument,
+} from "./dto/PostDTO";
 
 export const getPostByTagName = async (
   tagName: string
-): Promise<ApiResponseType<PostDTO[]>> => {
+): Promise<ApiResponseType<PostFirestoreDocument[]>> => {
   let tagId: string;
   try {
     const documents = await store
@@ -12,6 +15,7 @@ export const getPostByTagName = async (
       .where("name", "==", tagName)
       .get();
 
+    // tag名の重複がないことが前提
     const docs = documents.docs;
     if (docs.length !== 1) {
       throw new Error("duplicated data");
@@ -31,7 +35,7 @@ export const getPostByTagName = async (
     const data = documents.docs.map((d) => {
       return { id: d.id, ...d.data() };
     });
-    if (!isPostDTOS(data)) {
+    if (!arePostsFirestoreDocument(data)) {
       console.error("<getPostsByDate> invalid data struct: ", data);
       return { data: undefined, error: "invalid data struct" };
     }

@@ -3,12 +3,15 @@ import styled from "styled-components";
 import { Layout } from "../components/Layout";
 import { PostListItem } from "../components/PostListItem";
 import { Color } from "../const/color";
-import { createPostForView, PostViewType } from "../entity/Post";
 import { getPosts } from "../repository/getPosts";
 import { getTags } from "../repository/getTags";
+import {
+  PostIndexPagePostType,
+  toPostIndexPagePostType,
+} from "../type/ui/Post";
 
 type Props = {
-  posts?: PostViewType[];
+  posts?: PostIndexPagePostType[];
   error?: string;
   className?: string;
 };
@@ -54,7 +57,7 @@ export const getStaticProps: GetStaticProps = async () => {
     data.map(async (d) => {
       const tagsResponse = await getTags(d.tags);
       const tagData = tagsResponse.data;
-      return createPostForView(d, tagData, false);
+      return toPostIndexPagePostType(d, tagData);
     })
   );
 

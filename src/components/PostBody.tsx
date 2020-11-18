@@ -1,7 +1,6 @@
-import Link from "next/link";
 import styled from "styled-components";
 import { Color } from "../const/color";
-import { HTMLContentType, PostViewType } from "../entity/Post";
+import { HTMLContentType } from "../type/model/Post";
 
 type PassedPropsType = {
   content: HTMLContentType;
