@@ -6,6 +6,7 @@ import { Color } from "../const/color";
 import { PostViewType } from "../entity/Post";
 import Firebase from "../infra/FirebaseClient";
 import { deletePost } from "../repository/deletePost";
+import TurndownService from "turndown";
 
 interface PassedProps {
   post: PostViewType;
@@ -19,8 +20,11 @@ interface Props extends PassedProps, ContainerProps {
   className?: string;
 }
 
+const turndownService = new TurndownService();
+
 const Component = (props: Props) => (
   <div className={props.className}>
+    <h1>編集ページ</h1>
     <div>
       <label>title</label>
       <input defaultValue={props.post.title}></input>
@@ -28,7 +32,7 @@ const Component = (props: Props) => (
     <div>
       <label>content</label>
       <textarea
-        defaultValue={props.post.content}
+        defaultValue={turndownService.turndown(props.post.content)}
         cols={80}
         rows={30}
       ></textarea>
