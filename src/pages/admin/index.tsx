@@ -5,12 +5,12 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import { Login } from "../../components/Login";
 import { PostEditListItem } from "../../components/PostEditListItem";
-import { createTag } from "../../entity/Tag";
 import { usePostTil } from "../../hooks/usePostTil";
 import Firebase from "../../infra/FirebaseClient";
 import { getPosts } from "../../repository/getPosts";
 import { getTags } from "../../repository/getTags";
 import { toHTMLContentType } from "../../type/model/Post";
+import { createTag } from "../../type/model/Tag";
 import {
   PostIndexPagePostType,
   toPostIndexPagePostType,

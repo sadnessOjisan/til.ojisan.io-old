@@ -3,10 +3,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import TurndownService from "turndown";
 import { Color } from "../const/color";
-import { createTag } from "../entity/Tag";
 import { useEditPost } from "../hooks/useEditPost";
 import Firebase from "../infra/FirebaseClient";
 import { toHTMLContentType } from "../type/model/Post";
+import { createTag } from "../type/model/Tag";
 import { PostDetailPagePostType } from "../type/ui/Post";
 import { Login } from "./Login";
 

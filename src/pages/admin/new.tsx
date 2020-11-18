@@ -4,10 +4,10 @@ import { FormEvent, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import { Login } from "../../components/Login";
-import { createHTMLString } from "../../entity/Post";
-import { createTag } from "../../entity/Tag";
 import { usePostTil } from "../../hooks/usePostTil";
 import Firebase from "../../infra/FirebaseClient";
+import { toHTMLContentType } from "../../type/model/Post";
+import { createTag, toTag } from "../../type/model/Tag";
 
 interface ContainerProps {
   user: firebase.User;
@@ -100,7 +100,7 @@ const ContainerComponent = () => {
       .replace(" ", "")
       .split(",")
       .map((tag) => createTag(tag));
-    const html = createHTMLString(content);
+    const html = toHTMLContentType(content);
     post({ title, content: html, tags }, token);
   };
 

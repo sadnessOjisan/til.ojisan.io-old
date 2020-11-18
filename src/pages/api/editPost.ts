@@ -1,12 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { COLLECTION } from "../../const/firestoreCollection";
-import {
-  isSubmitEditPostType,
-  isSubmitPostType,
-  SubmitEditPostType,
-  SubmitPostType,
-} from "../../entity/Post";
 import { Admin, store } from "../../infra/FirebaseServer";
+import { isSubmitEditPostType } from "../../repository/dto/PostDTO";
+import { SubmitEditPostType } from "../../type/ui/Post";
 
 /**
  * 編集成功: 204

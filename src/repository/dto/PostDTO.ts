@@ -83,3 +83,9 @@ export const isSubmitPostType = (data: any): data is FormPostType => {
   if (!isStringArray(data.tags)) return false;
   return true;
 };
+
+export const isSubmitEditPostType = (data: any): data is EditFormPostType => {
+  if (typeof data.id !== "string") return false;
+  isSubmitPostType(data);
+  return true;
+};
