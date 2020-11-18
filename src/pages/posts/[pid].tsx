@@ -19,21 +19,23 @@ interface Props extends InjectedProps {
 }
 
 const Component = (props: Props) => (
-  <Layout>
-    <div className={props.className}>
-      {props.isFallback ? (
-        <div>generating file...</div>
-      ) : (
-        <>
-          {props.post ? (
-            <Post post={props.post}></Post>
-          ) : (
-            JSON.stringify(props.error)
-          )}
-        </>
-      )}
-    </div>
-  </Layout>
+  <>
+    <Layout>
+      <div className={props.className}>
+        {props.isFallback ? (
+          <div>generating file...</div>
+        ) : (
+          <>
+            {props.post ? (
+              <Post post={props.post}></Post>
+            ) : (
+              JSON.stringify(props.error)
+            )}
+          </>
+        )}
+      </div>
+    </Layout>
+  </>
 );
 
 const StyledComponent = styled(Component)`
