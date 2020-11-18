@@ -21,28 +21,25 @@ interface Props extends PassedProps, ContainerProps {
 
 const Component = (props: Props) => (
   <div className={props.className}>
-    <span className="date">{props.post.formattedCreatedDate}</span>
-    <span>{props.post.title}</span>
-    <span className="tags">
-      [
-      {props.post.tags.map((tag) => (
-        <Link href={`/tags/${tag.name}`} key={tag.name}>
-          <span className="tag" key={tag.name}>
-            {tag.name}
-          </span>
-        </Link>
-      ))}
-      ]
-    </span>
-    <Link href={`/posts/${props.post.id}`}>
-      <a>記事</a>
-    </Link>
-    <Link href={`/admin/edit/${props.post.id}`}>
-      <a>Edit</a>
-    </Link>
-    <button onClick={() => props.handleClickDeleteButtonClick(props.post.id)}>
-      削除
-    </button>
+    <div>
+      <label>title</label>
+      <input defaultValue={props.post.title}></input>
+    </div>
+    <div>
+      <label>content</label>
+      <textarea
+        defaultValue={props.post.content}
+        cols={80}
+        rows={30}
+      ></textarea>
+    </div>
+    <div>
+      <label>tags</label>
+      <input
+        defaultValue={props.post.tags.map((tag) => tag.name).join(",")}
+      ></input>
+    </div>
+    <button onClick={() => {}}>送信</button>
   </div>
 );
 
@@ -111,4 +108,4 @@ const ContainerComponent = (props: PassedProps) => {
   );
 };
 
-export const PostEditListItem = ContainerComponent;
+export const PostEditForm = ContainerComponent;
