@@ -1,6 +1,5 @@
 import { GetStaticProps } from "next";
 import { useRouter } from "next/dist/client/router";
-import { Head } from "next/document";
 import styled from "styled-components";
 import { Layout } from "../../components/Layout";
 import { Post } from "../../components/Post";
@@ -21,10 +20,6 @@ interface Props extends InjectedProps {
 
 const Component = (props: Props) => (
   <>
-    <Head>
-      <title>{props.post?.title}</title>
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    </Head>
     <Layout>
       <div className={props.className}>
         {props.isFallback ? (
