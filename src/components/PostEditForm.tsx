@@ -1,12 +1,12 @@
 import { FormEvent, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
+import TurndownService from "turndown";
 import { Color } from "../const/color";
 import { createHTMLString, PostViewType } from "../entity/Post";
-import Firebase from "../infra/FirebaseClient";
-import TurndownService from "turndown";
 import { createTag } from "../entity/Tag";
 import { useEditPost } from "../hooks/useEditPost";
+import Firebase from "../infra/FirebaseClient";
 import { Login } from "./Login";
 
 interface PassedProps {
@@ -67,7 +67,7 @@ const Component = (props: Props) => (
                     .join(",")}
                 ></input>
               </div>
-              <button onClick={() => {}}>送信</button>
+              <button>送信</button>
             </form>
           </div>
         ) : (

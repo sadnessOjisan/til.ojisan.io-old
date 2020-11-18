@@ -45,7 +45,7 @@ const Component = (props: Props) => (
         <Link href="/admin/new">新規追加</Link>
         {props.user && props.posts ? (
           props.posts.map((post) => (
-            <PostEditListItem post={post}></PostEditListItem>
+            <PostEditListItem post={post} key={post.id}></PostEditListItem>
           ))
         ) : (
           <Login></Login>
