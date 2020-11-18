@@ -73,6 +73,8 @@ export const createPostForView = (
 
 export type DocumentFieldData = Omit<PostType, "id">;
 
+export type FormEditPostType = Omit<PostType, "createdAt">;
+
 export type FormPostType = Omit<PostType, "id" | "createdAt">;
 
 // DTO
@@ -80,6 +82,12 @@ export type SubmitPostType = {
   title: string;
   content: string;
   createdAt: FirebaseFirestore.FieldValue;
+  tags: string[];
+};
+
+export type SubmitEditPostType = {
+  title: string;
+  content: string;
   tags: string[];
 };
 
@@ -126,6 +134,18 @@ export const isSubmitPostType = (data: any): data is FormPostType => {
   if (typeof data.content !== "string") return false;
   if (!isTags(data.tags)) return false;
   return true;
+};
+
+export const isSubmitEditPostType = (data: any): data is FormEditPostType => {
+  if (typeof data.id !== "string") return false;
+  if (typeof data.title !== "string") return false;
+  if (typeof data.content !== "string") return false;
+  if (!isTags(data.tags)) return false;
+  return true;
+};
+
+export const isDeletePostType = (id: unknown): id is string => {
+  return typeof id === "string";
 };
 
 export const isPosts = (data: any): data is PostType[] => {
