@@ -1,6 +1,4 @@
-import Link from "next/link";
 import styled from "styled-components";
-import { PostViewType } from "../entity/Post";
 import { Footer } from "./Footer";
 
 type PassedPropsType = {

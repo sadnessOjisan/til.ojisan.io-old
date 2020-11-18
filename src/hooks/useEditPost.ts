@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { FormEditPostType, FormPostType } from "../entity/Post";
 import { Fetch } from "../infra/fetch";
+import { EditFormPostType } from "../repository/dto/PostDTO";
 
 export const useEditPost = (): [
   boolean,
-  (body: FormEditPostType, token: string) => void,
+  (body: EditFormPostType, token: string) => void,
   string
 ] => {
   const [sending, setSendingState] = useState(false);
   const [error, setErrorMessage] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [body, setBody] = useState<FormPostType | null>(null);
+  const [body, setBody] = useState<EditFormPostType | null>(null);
   useEffect(() => {
     if (body === null || token === null || sending === false) return;
     Fetch(`api/editPost`, {
@@ -39,7 +39,7 @@ export const useEditPost = (): [
   }, [sending]);
 
   const post = useCallback(
-    (body: FormPostType, token: string): void => {
+    (body: EditFormPostType, token: string): void => {
       setBody(body);
       setToken(token);
       setSendingState(true);

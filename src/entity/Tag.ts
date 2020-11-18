@@ -1,8 +1,7 @@
-export type TagType = {
-  name: string;
-  backgroundColor: string;
-  innerColor: string;
-};
+// TODO: as HexColorType をmapを使ってtoHexみたいなのに置き換える
+
+import { TagType } from "../type/model/Tag";
+import { HexColorType, isHexColorType } from "../type/util";
 
 export type SubmitTagType = TagType & {
   createdAt: string;
@@ -40,15 +39,15 @@ export const isTagsDTO = (data: any): data is TagType[] => {
 
 export const createTag = (name: string): TagType => {
   const isWhite = Math.random() < 0.5;
-  let backgroundColor, innerColor;
+  let backgroundColor: HexColorType, innerColor: HexColorType;
   if (isWhite) {
     backgroundColor =
       bgWithWhite[Math.floor(Math.random() * bgWithWhite.length)];
-    innerColor = "#fffffe";
+    innerColor = "#fffffe" as HexColorType;
   } else {
     backgroundColor =
       bgWithBlack[Math.floor(Math.random() * bgWithBlack.length)];
-    innerColor = "#271c19";
+    innerColor = "#271c19" as HexColorType;
   }
 
   return { name, backgroundColor, innerColor };
@@ -63,7 +62,7 @@ const bgWithWhite = [
   "#8c7851",
   "#00473e",
   "#e53170",
-];
+] as HexColorType[];
 
 const bgWithBlack = [
   "#eebbc3",
@@ -73,4 +72,4 @@ const bgWithBlack = [
   "#ff6e6c",
   "#ffc0ad",
   "c3ffad",
-];
+] as HexColorType[];

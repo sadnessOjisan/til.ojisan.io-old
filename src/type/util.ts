@@ -1,5 +1,17 @@
 import dayjs from "dayjs";
 
+export type HexColorType = string & {
+  __hexColorTypeString: never;
+};
+
+export const isHexColorType = (color: string): color is HexColorType => {
+  // # で始まるべき
+  if (color[0] !== "#") return false;
+  // #aaa, #aaaaaa であるべき
+  if (color.length !== 4 && color.length !== 7) return false;
+  return true;
+};
+
 export type ApiResponseType<T> = { data: T; error: string };
 
 export type ValidDateType =
@@ -22,17 +34,17 @@ export type FormattedDateTimeForURLType = string & {
   __formattedJapaneseDateTimeString: never;
 };
 
-export const toFormattedJapaneseDateType = (date: Date) => {
+export const toFormattedJapaneseDateType = (date: ValidDateType) => {
   return dayjs(date).format("YYYY年M月D日") as FormattedJapaneseDateType;
 };
 
-export const toFormattedJapaneseDateTimeType = (date: Date) => {
+export const toFormattedJapaneseDateTimeType = (date: ValidDateType) => {
   return dayjs(date).format(
     "YYYY年M月D日 hh時mm分"
   ) as FormattedJapaneseDateTimeType;
 };
 
-export const toFormattedDateTimeForURLType = (date: Date) => {
+export const toFormattedDateTimeForURLType = (date: ValidDateType) => {
   return dayjs(date).format("YYYY-MM-DD") as FormattedJapaneseDateTimeType;
 };
 

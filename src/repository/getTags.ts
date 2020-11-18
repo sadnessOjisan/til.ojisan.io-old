@@ -1,20 +1,20 @@
-import { isTagsDTO, TagType } from "../entity/Tag";
 import { FieldPath, store } from "../infra/FirebaseServer";
 import { ApiResponseType } from "../type/util";
+import { areTagsFirestoreDocument, TagsFirestoreDocument } from "./dto/TagDTO";
 
 export const getTags = async (
   ids: string[]
   // たまたま dto と tagtype が一致しているからこう書いてる
-): Promise<ApiResponseType<TagType[]>> => {
+): Promise<ApiResponseType<TagsFirestoreDocument>> => {
   try {
     const documents = await store
       .collection("tags")
       .where(FieldPath.documentId(), "in", ids)
       .get();
     const tags = documents.docs.map((d) => {
-      return d.data();
+      return { id: d.id, ...d.data() };
     });
-    if (!isTagsDTO(tags)) {
+    if (!areTagsFirestoreDocument(tags)) {
       console.error("<getTags> invalid data struct: ", tags);
       return { data: undefined, error: "invalid format data" };
     }

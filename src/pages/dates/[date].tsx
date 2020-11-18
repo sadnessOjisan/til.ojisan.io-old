@@ -2,18 +2,17 @@ import styled from "styled-components";
 import { Layout } from "../../components/Layout";
 import { PostListItem } from "../../components/PostListItem";
 import { Color } from "../../const/color";
-import {
-  createPostForView,
-  createURLFormattedDate,
-  isValidDate,
-  PostViewType,
-} from "../../entity/Post";
 import { getPostAllDates } from "../../repository/getPostAllDates";
 import { getPostsByDate } from "../../repository/getPostsByDate";
 import { getTags } from "../../repository/getTags";
+import {
+  PostIndexPagePostType,
+  toPostIndexPagePostType,
+} from "../../type/ui/Post";
+import { isValidDate, toFormattedDateTimeForURLType } from "../../type/util";
 
 type Props = {
-  posts?: PostViewType[];
+  posts?: PostIndexPagePostType[];
   error?: string;
   className?: string;
   date?: string;
@@ -62,7 +61,7 @@ export async function getStaticProps(context) {
     data.map(async (d) => {
       const tagsResponse = await getTags(d.tags);
       const tagData = tagsResponse.data;
-      return createPostForView(d, tagData, false);
+      return toPostIndexPagePostType(d, tagData);
     })
   );
 
@@ -80,10 +79,10 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const postAllDatesResponse = await getPostAllDates();
   const { data, error } = postAllDatesResponse;
-  const YYYYMMDDDates = data.map((d) => createURLFormattedDate(d));
+  const datePath = data.map((d) => toFormattedDateTimeForURLType(d));
   return {
     // / を忘れるな
-    paths: !error ? YYYYMMDDDates.map((date) => `/dates/${date}`) : [],
+    paths: !error ? datePath.map((date) => `/dates/${date}`) : [],
     fallback: true,
   };
 }

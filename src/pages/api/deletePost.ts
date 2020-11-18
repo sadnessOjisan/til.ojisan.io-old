@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { COLLECTION } from "../../const/firestoreCollection";
-import { isDeletePostType } from "../../entity/Post";
 import { Admin, store } from "../../infra/FirebaseServer";
+import { isDeletePostType } from "../../repository/dto/PostDTO";
 
 /**
  * 削除成功: 204

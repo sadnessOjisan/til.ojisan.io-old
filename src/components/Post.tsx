@@ -1,12 +1,13 @@
 import Link from "next/link";
 import styled from "styled-components";
 import { Color } from "../const/color";
-import { createURLFormattedDate, PostViewType } from "../entity/Post";
+import { PostDetailPagePostType } from "../type/ui/Post";
+import { toFormattedDateTimeForURLType } from "../type/util";
 import { PostBody } from "./PostBody";
 import { Tag } from "./Tag";
 
 type PassedPropsType = {
-  post: PostViewType;
+  post: PostDetailPagePostType;
 };
 
 interface Props extends PassedPropsType {
@@ -25,8 +26,10 @@ const Component = (props: Props) => (
         </Link>
       ))}
     </div>
-    <Link href={`/dates/${createURLFormattedDate(props.post.createdAt)}`}>
-      <p className="date">{props.post.formattedCreatedDate}</p>
+    <Link
+      href={`/dates/${toFormattedDateTimeForURLType(props.post.createdAt)}`}
+    >
+      <p className="date">{props.post.createdAt}</p>
     </Link>
     <PostBody content={props.post.content} className="body"></PostBody>
   </div>

@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { isSubmitPostType, SubmitPostType } from "../../entity/Post";
 import { Admin, store } from "../../infra/FirebaseServer";
+import {
+  isSubmitPostType,
+  PostFirestoreField,
+} from "../../repository/dto/PostDTO";
 
 /**
  * 作成成功: 204
@@ -15,6 +18,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     response.json({ error: "invalid user token" });
   }
   const { body } = req;
+  // HACK: server サイドなのでバリデーションいる
   if (!isSubmitPostType(body)) {
     console.error("invalid body: ", body);
     throw new Error("invalid request");
@@ -50,7 +54,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
     return;
   }
   Promise.all(promises).then(async () => {
-    const postBody: SubmitPostType = {
+    const postBody: PostFirestoreField = {
       title: body.title,
       content: body.content,
       createdAt: Admin.firestore.FieldValue.serverTimestamp(),

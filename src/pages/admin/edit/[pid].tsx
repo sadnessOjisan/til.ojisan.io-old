@@ -1,16 +1,15 @@
-import { GetStaticProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
-import { Layout } from "../../../components/Layout";
-import { Post } from "../../../components/Post";
 import { PostEditForm } from "../../../components/PostEditForm";
-import { createPostForView, PostViewType } from "../../../entity/Post";
 import { getPostById } from "../../../repository/getPost";
-import { getPostIds } from "../../../repository/getPostIds";
 import { getTags } from "../../../repository/getTags";
+import {
+  PostDetailPagePostType,
+  toPostDetailPagePostType,
+} from "../../../type/ui/Post";
 
 interface InjectedProps {
-  post?: PostViewType;
+  post?: PostDetailPagePostType;
   error?: string;
   isFallback: boolean;
 }
@@ -67,7 +66,7 @@ export const getServerSideProps = async (context) => {
   const tagIds = data.tags;
   const tagsResponse = await getTags(tagIds);
   const tagData = tagsResponse.data;
-  const viewData = createPostForView(data, tagData, true);
+  const viewData = toPostDetailPagePostType(data, tagData);
   return {
     // HACK: undefined は埋め込めないため
     props: !error ? { post: viewData } : { error },

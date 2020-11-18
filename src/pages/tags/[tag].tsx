@@ -2,13 +2,16 @@ import styled from "styled-components";
 import { Layout } from "../../components/Layout";
 import { PostListItem } from "../../components/PostListItem";
 import { Color } from "../../const/color";
-import { createPostForView, PostViewType } from "../../entity/Post";
 import { getAllTags } from "../../repository/getAllTags";
-import { getPostByTagName } from "../../repository/getPostByTagName";
+import { getPostByTagName } from "../../repository/getPostsByTagName";
 import { getTags } from "../../repository/getTags";
+import {
+  PostIndexPagePostType,
+  toPostIndexPagePostType,
+} from "../../type/ui/Post";
 
 type Props = {
-  posts?: PostViewType[];
+  posts?: PostIndexPagePostType[];
   tagName: string;
   error?: string;
   className?: string;
@@ -58,7 +61,7 @@ export async function getStaticProps(context) {
     data.map(async (d) => {
       const tagsResponse = await getTags(d.tags);
       const tagData = tagsResponse.data;
-      return createPostForView(d, tagData, false);
+      return toPostIndexPagePostType(d, tagData);
     })
   );
 

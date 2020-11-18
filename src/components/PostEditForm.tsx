@@ -3,14 +3,15 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import TurndownService from "turndown";
 import { Color } from "../const/color";
-import { createHTMLString, PostViewType } from "../entity/Post";
 import { createTag } from "../entity/Tag";
 import { useEditPost } from "../hooks/useEditPost";
 import Firebase from "../infra/FirebaseClient";
+import { toHTMLContentType } from "../type/model/Post";
+import { PostDetailPagePostType } from "../type/ui/Post";
 import { Login } from "./Login";
 
 interface PassedProps {
-  post: PostViewType;
+  post: PostDetailPagePostType;
 }
 
 interface ContainerProps {
@@ -137,7 +138,7 @@ const ContainerComponent = (props: PassedProps) => {
       .replace(" ", "")
       .split(",")
       .map((tag) => createTag(tag));
-    const html = createHTMLString(content);
+    const html = toHTMLContentType(content);
     post({ title, content: html, tags, id: props.post.id }, token);
   };
   const containerProps = {

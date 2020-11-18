@@ -2,6 +2,8 @@
  * @file firestore の post コレクションへのアクセス型を定義するファイル
  */
 
+import { HTMLContentType, MdContentType } from "../../type/model/Post";
+import { TagType } from "../../type/model/Tag";
 import { FireStoreDocument, isStringArray } from "../../type/util";
 
 export type PostFirestoreField = {
@@ -60,4 +62,24 @@ export type DeletePostType = {
 
 export const isDeletePostType = (body: any): body is DeletePostType => {
   return typeof body.id === "string";
+};
+
+export type FormPostType = {
+  title: string;
+  content: HTMLContentType;
+  tags: TagType[];
+};
+
+export type EditFormPostType = {
+  id: string;
+  title: string;
+  content: HTMLContentType;
+  tags: TagType[];
+};
+
+export const isSubmitPostType = (data: any): data is FormPostType => {
+  if (typeof data.title !== "string") return false;
+  if (typeof data.content !== "string") return false;
+  if (!isStringArray(data.tags)) return false;
+  return true;
 };

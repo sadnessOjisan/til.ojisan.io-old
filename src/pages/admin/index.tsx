@@ -5,16 +5,16 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import { Login } from "../../components/Login";
 import { PostEditListItem } from "../../components/PostEditListItem";
-import {
-  createHTMLString,
-  createPostForView,
-  PostViewType,
-} from "../../entity/Post";
 import { createTag } from "../../entity/Tag";
 import { usePostTil } from "../../hooks/usePostTil";
 import Firebase from "../../infra/FirebaseClient";
 import { getPosts } from "../../repository/getPosts";
 import { getTags } from "../../repository/getTags";
+import { toHTMLContentType } from "../../type/model/Post";
+import {
+  PostIndexPagePostType,
+  toPostIndexPagePostType,
+} from "../../type/ui/Post";
 
 interface ContainerProps {
   user: firebase.User;
@@ -27,7 +27,7 @@ interface ContainerProps {
 }
 
 interface PassedProps {
-  posts?: PostViewType[];
+  posts?: PostIndexPagePostType[];
 }
 
 interface Props extends ContainerProps, PassedProps {
@@ -89,7 +89,7 @@ const ContainerComponent = (props: PassedProps) => {
       .replace(" ", "")
       .split(",")
       .map((tag) => createTag(tag));
-    const html = createHTMLString(content);
+    const html = toHTMLContentType(content);
     post({ title, content: html, tags }, token);
   };
 
@@ -129,7 +129,7 @@ export const getServerSideProps = async (context) => {
     data.map(async (d) => {
       const tagsResponse = await getTags(d.tags);
       const tagData = tagsResponse.data;
-      return createPostForView(d, tagData, false);
+      return toPostIndexPagePostType(d, tagData);
     })
   );
 
