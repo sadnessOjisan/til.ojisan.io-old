@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Color } from "../const/color";
-import { TagType } from "../entity/Tag";
+import { TagType } from "../type/model/Tag";
 
 type PassedPropsType = {
   tag: TagType;

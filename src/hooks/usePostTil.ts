@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { FormPostType } from "../entity/Post";
 import { Fetch } from "../infra/fetch";
+import { FormPostType } from "../repository/dto/PostDTO";
 
 export const usePostTil = (): [
   boolean,

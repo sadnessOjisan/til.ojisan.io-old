@@ -1,6 +1,11 @@
 import { PostFirestoreDocument } from "../../repository/dto/PostDTO";
 import { TagsFirestoreDocument } from "../../repository/dto/TagDTO";
-import { PostType, toHTMLContentType, toPostId } from "../model/Post";
+import {
+  HTMLContentType,
+  PostType,
+  toHTMLContentType,
+  toPostId,
+} from "../model/Post";
 import { toTags } from "../model/Tag";
 import {
   FormattedJapaneseDateTimeType,
@@ -20,7 +25,8 @@ export type PostIndexPagePostType = Omit<PostType, "createdAt"> & {
   createdAt: FormattedJapaneseDateType;
 };
 
-export type PostDetailPagePostType = Omit<PostType, "createdAt"> & {
+export type PostDetailPagePostType = Omit<PostType, "createdAt" | "content"> & {
+  content: HTMLContentType;
   createdAt: FormattedJapaneseDateTimeType;
 };
 
@@ -29,6 +35,7 @@ export const toPostIndexPagePostType = (
   tags: TagsFirestoreDocument
 ): PostIndexPagePostType => {
   const postId = toPostId(post.id);
+  // @ts-ignore 型定義にtoDate()が生えていない
   const createdAt = post.createdAt.toDate();
   const date = toFormattedJapaneseDateType(createdAt);
   const htmlContent = toHTMLContentType(post.content);
@@ -48,6 +55,7 @@ export const toPostDetailPagePostType = (
   tags: TagsFirestoreDocument
 ): PostDetailPagePostType => {
   const postId = toPostId(post.id);
+  // @ts-ignore 型定義にtoDate()が生えていない
   const createdAt = post.createdAt.toDate();
   const date = toFormattedJapaneseDateTimeType(createdAt);
   const htmlContent = toHTMLContentType(post.content);

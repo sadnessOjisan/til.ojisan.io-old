@@ -1,6 +1,5 @@
-import { createValidDate, isValidDates, ValidDateType } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
-import { ApiResponseType } from "../type/util";
+import { ApiResponseType, isValidDate, ValidDateType } from "../type/util";
 
 export const getPostAllDates = async (): Promise<
   ApiResponseType<ValidDateType[]>
@@ -8,12 +7,12 @@ export const getPostAllDates = async (): Promise<
   try {
     const documents = await store.collection("posts").get();
     const dates = documents.docs.map((d) => {
-      return createValidDate(d.data().createdAt.toDate());
+      const validDate = d.data().createdAt.toDate();
+      if (!isValidDate(validDate)) {
+        throw new Error();
+      }
+      return validDate;
     });
-    if (!isValidDates(dates)) {
-      console.error("<getPostAllDates> invalid data struct: ", dates);
-      return { data: undefined, error: "invalid data struct" };
-    }
     return { data: dates, error: undefined };
   } catch (e) {
     return { data: undefined, error: e };
