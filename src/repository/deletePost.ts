@@ -1,8 +1,8 @@
-import { isDeletePostType } from "../entity/Post";
+import { DeletePostType, isDeletePostType } from "./dto/PostDTO";
 import { Fetch } from "../infra/fetch";
 
 export const deletePost = (postId: string, token: string) => {
-  const body = { id: postId };
+  const body: DeletePostType = { id: postId };
   if (!isDeletePostType(body)) {
     console.error("<deletePost> invalid body: ", body);
     throw new Error("invalid request");

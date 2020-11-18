@@ -1,8 +1,13 @@
-import { isPostDTOS, PostDTO } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
 import { ApiResponseType } from "../type/util";
+import {
+  arePostsFirestoreDocument,
+  PostFirestoreDocument,
+} from "./dto/PostDTO";
 
-export const getPosts = async (): Promise<ApiResponseType<PostDTO[]>> => {
+export const getPosts = async (): Promise<
+  ApiResponseType<PostFirestoreDocument[]>
+> => {
   try {
     const snapshot = await store.collection("posts").get();
     const posts = snapshot.docs.map((d) => {
@@ -12,7 +17,7 @@ export const getPosts = async (): Promise<ApiResponseType<PostDTO[]>> => {
       };
       return post;
     });
-    if (!isPostDTOS(posts)) {
+    if (!arePostsFirestoreDocument(posts)) {
       console.error("<getPosts> invalid data struct: ", posts);
       return { data: undefined, error: "invalid data struct" };
     }

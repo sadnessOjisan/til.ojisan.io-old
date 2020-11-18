@@ -1,15 +1,15 @@
-import { isIds, PostIdsType, PostType } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
 import { Fetch } from "../infra/fetch";
-import { ApiResponseType } from "../type/util";
+import { ApiResponseType, isStringArray } from "../type/util";
+import { PostIdsType } from "../type/model/Post";
 
-export const getPostIds = async (): Promise<ApiResponseType<PostIdsType>> => {
+export const getPostIds = async (): Promise<ApiResponseType<string[]>> => {
   try {
     const documents = await store.collection("posts").get();
     const postIds = documents.docs.map((d) => {
       return d.id;
     });
-    if (!isIds(postIds)) {
+    if (!isStringArray(postIds)) {
       console.error("<getPostIds> invalid data struct: ", postIds);
       return { data: undefined, error: "invalid data struct" };
     }

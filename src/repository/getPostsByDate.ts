@@ -1,11 +1,18 @@
 import dayjs from "dayjs";
-import { isPostDTOS, PostDTO, ValidDateType } from "../entity/Post";
 import { store } from "../infra/FirebaseServer";
-import { ApiResponseType } from "../type/util";
+import { ApiResponseType, ValidDateType } from "../type/util";
+import {
+  arePostsFirestoreDocument,
+  PostFirestoreDocument,
+} from "./dto/PostDTO";
 
+/**
+ * 渡された日付のとある1日分の投稿を全件取得する。
+ * @param date
+ */
 export const getPostsByDate = async (
   date: ValidDateType
-): Promise<ApiResponseType<PostDTO[]>> => {
+): Promise<ApiResponseType<PostFirestoreDocument[]>> => {
   try {
     const documents = await store
       .collection("posts")
@@ -21,7 +28,7 @@ export const getPostsByDate = async (
       return { id: d.id, ...d.data() };
     });
 
-    if (!isPostDTOS(data)) {
+    if (!arePostsFirestoreDocument(data)) {
       console.error("<getPostsByDate> invalid data struct: ", data);
       return { data: undefined, error: "invalid data struct" };
     }
