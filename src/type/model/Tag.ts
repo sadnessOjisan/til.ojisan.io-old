@@ -62,5 +62,5 @@ const bgWithBlack = [
   "#eff0f3",
   "#ff6e6c",
   "#ffc0ad",
-  "c3ffad",
+  "#c3ffad",
 ] as HexColorType[];
