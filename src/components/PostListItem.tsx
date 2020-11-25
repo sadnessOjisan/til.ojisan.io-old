@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Color } from "../const/color";
 import { PostIndexPagePostType } from "../type/ui/Post";
 
-type PassedPropsType = {
+export type PassedPropsType = {
   post: PostIndexPagePostType;
 };
 

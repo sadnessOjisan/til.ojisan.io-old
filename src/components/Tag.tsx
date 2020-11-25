@@ -1,4 +1,4 @@
-// @FIXME: 親がflexboxじゃないと最大限まで広がってしまう
+// @FIXME: 親がflexboxじゃないと最大限まで広がってしまう(divじゃなくてspanにしてもいいかも)
 
 import styled from "styled-components";
 import { Color } from "../const/color";
