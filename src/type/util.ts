@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat);
 
 export type HexColorType = string & {
   __hexColorTypeString: never;
@@ -46,6 +49,12 @@ export const toFormattedJapaneseDateTimeType = (date: ValidDateType) => {
 
 export const toFormattedDateTimeForURLType = (date: ValidDateType) => {
   return dayjs(date).format("YYYY-MM-DD") as FormattedJapaneseDateTimeType;
+};
+
+export const toFormattedDateTimeForURLTypeFromJapaneseDateType = (
+  date: FormattedJapaneseDateTimeType
+) => {
+  return dayjs(date, "YYYY年MM月DD日").format("YYYY-MM-DD") as ValidDateType;
 };
 
 export const isValidDate = (date: any): date is ValidDateType => {

@@ -2,7 +2,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import { Color } from "../const/color";
 import { PostDetailPagePostType } from "../type/ui/Post";
-import { toFormattedDateTimeForURLType } from "../type/util";
+import { toFormattedDateTimeForURLTypeFromJapaneseDateType } from "../type/util";
 import { PostBody } from "./PostBody";
 import { Tag } from "./Tag";
 
@@ -27,7 +27,9 @@ const Component = (props: Props) => (
       ))}
     </div>
     <Link
-      href={`/dates/${toFormattedDateTimeForURLType(props.post.createdAt)}`}
+      href={`/dates/${toFormattedDateTimeForURLTypeFromJapaneseDateType(
+        props.post.createdAt
+      )}`}
     >
       <p className="date">{props.post.createdAt}</p>
     </Link>
