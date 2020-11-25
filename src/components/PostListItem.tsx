@@ -14,9 +14,9 @@ interface Props extends PassedPropsType {
 const Component = (props: Props) => (
   <div className={props.className}>
     <Link href={`/posts/${props.post.id}`}>
-      <a>
+      <div>
         <span className="date">{props.post.createdAt}</span>
-        <span>{props.post.title}</span>
+        <span className="title">{props.post.title}</span>
         <span className="tags">
           [
           {props.post.tags.map((tag) => (
@@ -28,7 +28,7 @@ const Component = (props: Props) => (
           ))}
           ]
         </span>
-      </a>
+      </div>
     </Link>
   </div>
 );
@@ -37,15 +37,20 @@ const StyledComponent = styled(Component)`
   color: white;
   margin-top: 12px;
 
-  & > a {
+  & > div {
+    display: flex;
     font-size: 16px;
     color: white;
     text-decoration: none;
+    cursor: pointer;
     & > span {
       margin-left: 18px;
     }
     &:hover {
       color: ${Color.link};
+    }
+    & > .title {
+      max-width: 70%;
     }
     & > .tags {
       & > .tag {
@@ -64,6 +69,19 @@ const StyledComponent = styled(Component)`
       }
     }
     & > .date {
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    margin-top: 24px;
+    & > div {
+      flex-direction: column;
+      & > .title {
+        max-width: 100%;
+      }
+      & > .date {
+        font-size: 12px;
+      }
     }
   }
 `;
