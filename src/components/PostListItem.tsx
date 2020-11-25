@@ -67,6 +67,7 @@ const StyledComponent = styled(Component)`
           text-decoration: underline;
         }
       }
+      word-break: break-all;
     }
     & > .date {
     }

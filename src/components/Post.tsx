@@ -45,8 +45,11 @@ const StyledComponent = styled(Component)`
   }
   & > .tags {
     display: flex;
+    flex-wrap: wrap;
+    margin: 24px 0px;
     & > * {
       margin-right: 12px;
+      margin-bottom: 12px;
       &:hover {
         cursor: pointer;
         text-decoration: underline;
