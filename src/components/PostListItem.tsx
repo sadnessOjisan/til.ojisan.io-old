@@ -55,6 +55,7 @@ const StyledComponent = styled(Component)`
     & > .tags {
       & > .tag {
         margin: 0 4px;
+        text-decoration: underline;
         &::after {
           content: ",";
         }
@@ -64,7 +65,7 @@ const StyledComponent = styled(Component)`
           }
         }
         &:hover {
-          text-decoration: underline;
+          font-weight: bold;
         }
       }
       word-break: break-all;
