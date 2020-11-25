@@ -1,8 +1,10 @@
+// @FIXME: 親がflexboxじゃないと最大限まで広がってしまう
+
 import styled from "styled-components";
 import { Color } from "../const/color";
 import { TagType } from "../type/model/Tag";
 
-type PassedPropsType = {
+export type PassedPropsType = {
   tag: TagType;
 };
 
