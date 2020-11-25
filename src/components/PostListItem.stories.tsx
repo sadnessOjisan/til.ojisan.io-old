@@ -1,7 +1,6 @@
-import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
+import React from "react";
 
-import { PostListItem } from "./PostListItem";
 import { toHTMLContentType, toPostId } from "../type/model/Post";
 import {
   HexColorType,
@@ -9,6 +8,7 @@ import {
   ValidDateType,
 } from "../type/util";
 import { Layout } from "./Layout";
+import { PostListItem } from "./PostListItem";
 
 export default {
   title: "PostListItem",
