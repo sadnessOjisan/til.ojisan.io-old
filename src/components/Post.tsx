@@ -62,6 +62,8 @@ const StyledComponent = styled(Component)`
   & > .date {
     margin-top: 12px;
     color: ${Color.paragraph};
+    cursor: pointer;
+    text-decoration: underline;
   }
 `;
 
