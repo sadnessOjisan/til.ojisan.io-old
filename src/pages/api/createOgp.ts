@@ -29,26 +29,30 @@ export default (req, res) => {
   //線形グラデーションを指定する
   const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
   console.error(bgColor1);
-  //赤→緑→青となるように、グラデーション色を３つ追加する
   gradient.addColorStop(0.0, `#${bgColor1}`);
   gradient.addColorStop(1.0, `#${bgColor2}`);
-  //上で指定したグラデーション内容を塗りつぶしスタイルに代入する
   ctx.fillStyle = gradient;
-  //現在のパスを塗りつぶす
   ctx.fill();
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Write "Awesome!"
-  ctx.font = "30px Impact";
+  ctx.font = "32px Impact";
   ctx.fillStyle = `#${textColor}`;
-
   // Draw line under text)
-  // Write "Awesome!"
-  ctx.font = "30px Impact";
-  ctx.fillText(title, 50, 100);
+  const textWidth = ctx.measureText(title).width;
+  ctx.fillText(title, (600 - textWidth) / 2, 100);
+
+  ctx.font = "24px Impact";
+  const nameWidth = ctx.measureText("@sadnessOjsian").width;
+  ctx.fillStyle = `white`;
+  ctx.fillText("@sadnessOjsian", (600 - nameWidth) / 2, 230);
+
+  ctx.font = "20px Impact";
+  const siteTitleWidth = ctx.measureText("til.ojisan.io").width;
+  ctx.fillStyle = `white`;
+  ctx.fillText("til.ojisan.io", 600 - 40 - siteTitleWidth, 280);
 
   const buf = canvas.toBuffer();
-
   res.writeHead(200, {
     "Content-Type": "image/png",
     "Content-Length": buf.length,
