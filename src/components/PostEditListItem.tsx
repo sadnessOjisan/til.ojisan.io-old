@@ -48,7 +48,6 @@ const Component = (props: Props) => (
 
 const StyledComponent = styled(Component)`
   margin-top: 12px;
-
   & > a {
     font-size: 16px;
     text-decoration: none;
