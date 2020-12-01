@@ -1,21 +1,15 @@
 # til.ojisan.io
 
-TIL
+TIL is WIP.
 
-## til
+## develop
 
-- `getStaticPath` はどう的ページ以外に使うとエラー
+```
+npm i
 
-## todo
+npm run dev
+```
 
-- [x] 記事取得
-- [x] 記事投稿
-- [x] 日付を跨いだ集約
-  - [x] 日付投稿
-- [x] タグによる集約
-  - [x] タグ投稿
-- [ ] デザイン
-  - [ ] フッター
-- [ ] CMS
-  - [ ] 編集
-  - [ ] 削除
+## deploy
+
+hosting to Vercel.
